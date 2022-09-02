@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { Link, useNavigate} from 'react-router-dom';
+import SignUp from './SignUp';
 import SignIn from './SignIn';
 
 
@@ -118,9 +120,9 @@ import SignIn from './SignIn';
 // }
 
 
-class Home extends React.Component {
-    render() {
-        return (
+class Home extends React.Component{
+    render(){
+        return(
             <div className='welcome'>
                 <SignIn/>
                 {/* <header>welcome to our hotel!</header>

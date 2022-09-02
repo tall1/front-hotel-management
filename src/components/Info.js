@@ -1,6 +1,7 @@
-import * as React from 'react';
 
-export default function Info(props) {
+import { useEffect } from 'react';
+import * as React from 'react';
+export default function Info (props) {  
 
     const [hotelData, setHotelData] = React.useState(null);
     const [userData, setUserData] = React.useState(null);
@@ -24,18 +25,18 @@ export default function Info(props) {
 //       ,[])
 
 
-    return (
-        <div className="Info">
-
-            <h1> hello user</h1>
-            {/* hello {userData.id} ! welcome to the evoluntary system */}
-            {/* your hotel: {hotelData.hotelName}
+  return( 
+    <div className="Info">
+        
+        <h1> hello user</h1>
+        {/* hello {userData.id} ! welcome to the evoluntary system */}
+        {/* your hotel: {hotelData.hotelName}
         numberoffloors :{hotelData.numOfFloors}
         numberofrooms :{hotelData.numOfRooms} */}
-
-        </div>
-    );
-}
+    
+    </div>
+  );
+  }
 
 
 

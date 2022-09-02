@@ -11,10 +11,11 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import {useLocation} from 'react-router-dom';
+import { Link, useNavigate , useLocation} from 'react-router-dom';
 import AdbIcon from '@mui/icons-material/Adb';
 import Settings from './Settings';
 import LoadFile from './LoadFile';
+import { useEffect } from 'react';
 import Assignment from './Assignment';
 import Info from './Info';
 
@@ -22,207 +23,220 @@ const pages = ['Update Settings and start alogrithem', 'Upload Data', 'Show Assi
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const ResponsiveAppBar = () => {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
-    const [currentItem, setCurrentItem] = React.useState("");
+  const [anchorElNav, setAnchorElNav] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [currentItem , setCurrentItem] = React.useState("");
+ 
 
 
-    const {state} = useLocation();
+  const { state } = useLocation();
 
 
-    const handleOpenNavMenu = (event) => {
-        setAnchorElNav(event.currentTarget);
-    };
-    const handleOpenUserMenu = (event) => {
-        setAnchorElUser(event.currentTarget);
-    };
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
 
-    const handleCloseNavMenu = (event) => {
-        setAnchorElNav(null);
-        setCurrentItem(event.currentTarget.id);
+  const handleCloseNavMenu = (event) => {
+    setAnchorElNav(null);
+    setCurrentItem(event.currentTarget.id);
+   
+  };
 
-    };
-
-    const handleCloseUserMenu = () => {
-        setAnchorElUser(null);
-    };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
+  };
 
 
-    const getItemContent = () => {
-        switch (currentItem) {
-            case "Update Settings and start alogrithem" :
-                return (
-                    <div>
-                        <Settings userid={state}/>
-                    </div>
-                );
-            case  "Upload Data":
-                return (
-                    <div>
-                        <LoadFile/>
-                    </div>
-                );
-            case "Show Assignament":
-                return (
-                    <div>
-                        <Assignment/>
-                    </div>
-                );
-
-                break;
-
-            default :
-                return (
-                    <div>
-                        <Info userid={state}/>
-                    </div>
-                );
-
-        }
-    }
-
-    return (
-        <React.Fragment>
-            <AppBar position="sticky">
-                <Container maxWidth="xl">
-                    <Toolbar disableGutters>
-                        <AdbIcon sx={{display: {xs: 'none', md: 'flex'}, mr: 1}}/>
-                        <Typography
-                            variant="h6"
-                            noWrap
-                            component="a"
-                            href="/"
-                            sx={{
-                                mr: 2,
-                                display: {xs: 'none', md: 'flex'},
-                                fontFamily: 'monospace',
-                                fontWeight: 700,
-                                letterSpacing: '.3rem',
-                                color: 'inherit',
-                                textDecoration: 'none',
-                            }}
-                        >
-                            Hotel management
-                        </Typography>
-
-                        <Box sx={{flexGrow: 1, display: {xs: 'flex', md: 'none'}}}>
-                            <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleOpenNavMenu}
-                                color="inherit"
-                            >
-                                <MenuIcon/>
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorElNav}
-                                anchorOrigin={{
-                                    vertical: 'bottom',
-                                    horizontal: 'left',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'left',
-                                }}
-                                open={Boolean(anchorElNav)}
-                                onClose={handleCloseNavMenu}
-                                sx={{
-                                    display: {xs: 'block', md: 'none'},
-                                }}
-                            >
-                                {pages.map((page) => (
-                                    <MenuItem id={page} key={page} onClick={handleCloseNavMenu}>
-                                        <Typography textAlign="center">{page}</Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-
-                        </Box>
-                        <AdbIcon sx={{display: {xs: 'flex', md: 'none'}, mr: 1}}/>
-                        <Typography
-                            variant="h5"
-                            noWrap
-                            component="a"
-                            href=""
-                            sx={{
-                                mr: 2,
-                                display: {xs: 'flex', md: 'none'},
-                                flexGrow: 1,
-                                fontFamily: 'monospace',
-                                fontWeight: 700,
-                                letterSpacing: '.3rem',
-                                color: 'inherit',
-                                textDecoration: 'none',
-                            }}
-                        >
-                            Hotel management
-                        </Typography>
-                        <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
-                            {pages.map((page) => (
-                                <Button
-                                    key={page}
-                                    id={page}
-                                    onClick={handleCloseNavMenu}
-                                    sx={{my: 2, color: 'white', display: 'block'}}
-                                >
-                                    {page}
-                                </Button>
-                            ))}
-                        </Box>
-
-                        <Box sx={{flexGrow: 0}}>
-                            <Tooltip title="Open settings">
-                                <IconButton onClick={handleOpenUserMenu} sx={{p: 0}}>
-                                    <Avatar alt="Remy Sharp"/>
-                                </IconButton>
-                            </Tooltip>
-                            <Menu
-                                sx={{mt: '45px'}}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
-                            >
-                                {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center">{setting}</Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-
-                        </Box>
-                    </Toolbar>
-                </Container>
-
-            </AppBar>
+  const getItemContent = () =>{
+    switch (currentItem)
+    {
+      case "Update Settings and start alogrithem" :
+      return(
             <div>
-                {getItemContent()}
+                  <Settings userid ={state} /> 
             </div>
-        </React.Fragment>
+      );
+      case  "Upload Data":
+    return(
+              <div>
+                  <LoadFile/> 
+              </div>
+                );
+        case "Show Assignament":
+          return(
+            <div>
+                <Assignment/> 
+            </div>
+              );
 
+          break;
 
-    );
+          default :
+          return(
+            <div>
+                <Info userid = {state}/> 
+            </div>
+              );
+
+    }
+  }
+
+  return (
+   <React.Fragment>
+    <AppBar position="sticky">
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Typography
+            variant="h6"
+            noWrap
+            component="a"
+            href="/"
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            Hotel management
+          </Typography>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+            <IconButton
+              size="large"
+              aria-label="account of current user"
+              aria-controls="menu-appbar"
+              aria-haspopup="true"
+              onClick={handleOpenNavMenu}
+              color="inherit"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorElNav}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              open={Boolean(anchorElNav)}
+              onClose={handleCloseNavMenu}
+              sx={{
+                display: { xs: 'block', md: 'none' },
+              }}
+            >
+              {pages.map((page) => (
+                <MenuItem id={page} key={page} onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">{page}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+           
+          </Box>
+          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Typography
+            variant="h5"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mr: 2,
+              display: { xs: 'flex', md: 'none' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            Hotel management
+          </Typography>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page) => (
+              <Button
+                key={page}
+                id = {page}
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                {page}
+              </Button>
+            ))}
+          </Box>
+
+          <Box sx={{ flexGrow: 0 }}>
+            <Tooltip title="Open settings">
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              sx={{ mt: '45px' }}
+              id="menu-appbar"
+              anchorEl={anchorElUser}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              open={Boolean(anchorElUser)}
+              onClose={handleCloseUserMenu}
+            >
+              {settings.map((setting) => (
+                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                  <Typography textAlign="center">{setting}</Typography>
+                </MenuItem>
+              ))}
+            </Menu>
+            
+          </Box>
+        </Toolbar>
+      </Container>
+ 
+    </AppBar>
+    <div>
+    {getItemContent()}
+    </div>
+    </React.Fragment>
+    
+ 
+  );
 };
 export default ResponsiveAppBar;
 
 
+
 {/* <div>
 {getItemContent()}
-</div> */
-}
+</div> */}
+
+
+
+
+
+
+
+
+
+
+
 
 
 // import react, { Component, useState, useEffect } from 'react';
@@ -238,6 +252,7 @@ export default ResponsiveAppBar;
 // import Typography from '@mui/material/Typography';
 // import Settings from './Settings';
 // import LoadFile from './LoadFile';
+
 
 
 // const steps = ['Select Evolutionary settings', 'Upload data', 'Create an ad'];
@@ -379,6 +394,7 @@ export default ResponsiveAppBar;
 // }
 
 
+
 // // export default function Login() {
 // //     const [userId , setUserId] = useState("");
 // //     const [password , setPassword] = useState("");
@@ -394,6 +410,7 @@ export default ResponsiveAppBar;
 // //         hotel: "this user not exist in this hotel",
 // //         login :"you are logged in sucssesfuly"
 // //     };
+
 
 
 // //      useEffect(() => {
@@ -414,7 +431,7 @@ export default ResponsiveAppBar;
 
 // //     const handleSubmit = async (event) => {
 // //         event.preventDefault();
-
+ 
 // //             const res= await fetch('http://localhost:8080/users/' +userId);
 // //             console.log({res});
 // //             // if ( res === null)
@@ -423,7 +440,7 @@ export default ResponsiveAppBar;
 // //             // }
 // //             // else{
 // //             const user = await res.json();
-
+            
 // //             if(user.hotel.hotelName !== chosenHotel){
 // //                 setErrorMessages({ name: "hotel", message: errors.hotel });
 // //             }
@@ -441,12 +458,12 @@ export default ResponsiveAppBar;
 // //             }
 
 // //     };
-
+    
 // //     const renderErrorMessage = (name) =>
 // //     name === errorMessages.name && (
 // //         <div className="error">{errorMessages.message}</div>
 // //     );
-
+           
 // //     return (
 // //         <div className='Login'>
 // //             <header>login to the system</header>
@@ -458,7 +475,7 @@ export default ResponsiveAppBar;
 // //                 <option value="DEFAULT" disabled>Choose Hotel</option>
 // //                 {/* <Select defaultValue={options[0]}  options={options} value={options.value}
 // //                  onChange={selectedOption => setChosenHotel(selectedOption)} /> */}  
-
+                
 // //                 {hotels.map((hotel) => (
 // //                     <option key={hotel.id} value={hotel.hotelName}>{hotel.hotelName}</option>
 // //                   ))}  
@@ -478,7 +495,7 @@ export default ResponsiveAppBar;
 // //             {/* <Link to="/assign"> */}
 // //                 <button type ="submit">submit</button>
 // //                 {renderErrorMessage("login")}
-
+ 
 // //             {/* </Link> */}
 // //             </form>
 // //         </div>
