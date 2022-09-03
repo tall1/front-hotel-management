@@ -26,7 +26,7 @@ export default function HotelSignUp() {
         const data = new FormData(event.currentTarget);
 
 
-        const res = await fetch('/users/get_id_by_email?email=' + state);
+        const res = await fetch('http://localhost:8080/users/get_id_by_email?email=' + state);
         console.log({res});
         const userId = await res.json();
 
