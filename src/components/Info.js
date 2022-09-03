@@ -8,13 +8,13 @@ export default function Info(props) {
 //     useEffect(()  => {
 //         //const fetchData = async () => {
 //         //save on session
-//             const res=  fetch('http://localhost:8080/users/get_id_by_email?email=' +props.userid);
+//             const res=  fetch('/users/get_id_by_email?email=' +props.userid);
 //             const userId =  res.json();
-//             const userres=  fetch('http://localhost:8080/users/' +userId);
+//             const userres=  fetch('/users/' +userId);
 //             const user =  userres.json();
 //             setUserData(user);
 //             const hotelId = user.hotelId;
-//             const hotelres= fetch('http://localhost:8080/hotels/' +hotelId);
+//             const hotelres= fetch('/hotels/' +hotelId);
 //             const hotel =  hotelres.json();
 //             setHotelData(hotel);
 //         }

@@ -15,7 +15,7 @@ export default function Assignment() {
 
             var storedTask = JSON.parse(sessionStorage.getItem("task"));
             if (storedTask != null) {
-                const res = fetch(`http://localhost:8080/assignments/get_status/` + storedTask);
+                const res = fetch(`/assignments/get_status/` + storedTask);
                 const jsonRes = res.json();
                 if (JSON.stringify(jsonRes) == "DONE") {
                     alert("your assignment is ready - go to check it")
@@ -56,7 +56,7 @@ export default function Assignment() {
         event.preventDefault();
 
         console.log(state.userId);
-        const res = await fetch("http://localhost:8080/assignments/byDate?userId=" + state.userId + "&day=5&month=8&year=2022");
+        const res = await fetch("/assignments/byDate?userId=" + state.userId + "&day=5&month=8&year=2022");
         const data = await res.json();
         console.log({data});
         const key = Object.entries(data.reservationRoomHashMap);

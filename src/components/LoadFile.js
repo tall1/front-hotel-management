@@ -41,7 +41,7 @@ export default function LoadFile() {
 
         if (resfile.length > 1) {
             console.log('1');
-            await fetch('http://localhost:8080/reservations/insert/reservation_list', {
+            await fetch('/reservations/insert/reservation_list', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -52,7 +52,7 @@ export default function LoadFile() {
         }
 
         if (roomfile.length > 1) {
-            await fetch('http://localhost:8080/rooms/insert/room_list', {
+            await fetch('/rooms/insert/room_list', {
                     method: 'POST',
                     headers: {
                         'Accept': 'application/json',
@@ -81,7 +81,7 @@ export default function LoadFile() {
                         }}
                     >
                         <div>
-                            <label class="file"> upload reservations file :</label>
+                            <label className="file"> upload reservations file :</label>
                             <input type="file" id="file" name="resfile" onChange={handleResChange}/>
                             <label> upload rooms file :</label>
                             <input type="file" name="roomfile" onChange={handleRoomChange}/>
@@ -109,7 +109,7 @@ export default function LoadFile() {
 
 //     console.log('3');
 
-//     await fetch('http://localhost:8080/reservations/insert/reservation_list', {
+//     await fetch('/reservations/insert/reservation_list', {
 //         method: 'POST',
 //         headers: {
 //             'Accept': 'application/json',

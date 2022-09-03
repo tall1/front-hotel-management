@@ -10,7 +10,7 @@ export default function Rooms() {
     const [rooms, setRooms] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/rooms/")
+        fetch("/rooms/")
             .then((res) => {
                 return res.json()
             })
