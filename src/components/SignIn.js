@@ -29,7 +29,6 @@ export default function SignIn() {
             document.getElementById('errorlabel').removeAttribute('hidden');
         } else {
             navigate("/Login", {state: data.get('email')}); // Tocheck
-
         }
         console.log({
             username: data.get('email'),

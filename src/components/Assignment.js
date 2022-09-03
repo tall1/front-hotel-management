@@ -11,25 +11,20 @@ export default function Assignment() {
     const [buttonClicked, setButtonClicked] = useState(false);
 
     useEffect(() => {
-        let interval = setInterval(() => {
-
-            var storedTask = JSON.parse(sessionStorage.getItem("task"));
-            if (storedTask != null) {
-                const res = fetch(`/assignments/get_status/` + storedTask);
-                const jsonRes = res.json();
-                if (JSON.stringify(jsonRes) == "DONE") {
-                    alert("your assignment is ready - go to check it")
+        let intervalId = setInterval(async () => {
+            var curTaskID = JSON.parse(sessionStorage.getItem("curTaskID"));
+            if (curTaskID != null) {
+                const res = await fetch(`/assignments/get_status/` + curTaskID)
+                    .then((body) => {
+                        return (body.text());
+                    });
+                if (res === "DONE") {
+                    alert("your assignment is ready - go to check it");
+                    clearInterval(intervalId);
                     //showAssignment();
                 }
             }
-
-
         }, 2000);
-
-        return () => {
-            clearInterval(interval);
-        };
-
     }, []);
 
 
