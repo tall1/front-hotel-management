@@ -9,6 +9,7 @@ import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import HotelSignUp from './components/HotelSignUp'
 import Info from './components/Info';
+import React from 'react';
 
 export default function App() {
     return (

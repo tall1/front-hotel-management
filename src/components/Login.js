@@ -17,8 +17,9 @@ import Settings from './Settings';
 import LoadFile from './LoadFile';
 import Assignment from './Assignment';
 import Info from './Info';
+import Rooms from './Rooms1';
 
-const pages = ['Update Settings and start alogrithem', 'Upload Data', 'Show Assignament'];
+const pages = ['Update Settings and start algorithm | ', 'Upload Data | ',  'Show Assignment | ', 'Rooms | '];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const ResponsiveAppBar = () => {
@@ -49,8 +50,9 @@ const ResponsiveAppBar = () => {
 
 
     const getItemContent = () => {
-        switch (currentItem) {
-            case "Update Settings and start alogrithem" :
+    let itm = currentItem.replace(" | ", "");
+        switch (itm) {
+            case "Update Settings and start algorithm" :
                 return (
                     <div>
                         <Settings userid={state}/>
@@ -62,10 +64,19 @@ const ResponsiveAppBar = () => {
                         <LoadFile/>
                     </div>
                 );
-            case "Show Assignament":
+            case "Show Assignment":
                 return (
                     <div>
                         <Assignment/>
+                    </div>
+                );
+
+                break;
+            case "Rooms":
+                return (
+                    <div>
+                        <br/>
+                        <Rooms/>
                     </div>
                 );
 
@@ -398,7 +409,7 @@ export default ResponsiveAppBar;
 
 // //      useEffect(() => {
 // //         const fetchData = async () => {
-// //           const res= await fetch('http://localhost:8080/hotels/'); 
+// //           const res= await fetch('http://localhost:8080/hotels/');
 // //          const data = await res.json();
 // //          setHotels(data);
 // //         }
