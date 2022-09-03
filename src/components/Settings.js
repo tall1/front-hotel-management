@@ -167,14 +167,14 @@ export default function Settings(props) {
                 //popUp();
 
 
-                let interval = setInterval(async () => {
-
-                    const resStatus = await fetch(`/assignments/get_status/` + storedTask);
-                    const jsonResStaus = await resStatus.json();
-                    //  const a = JSON.parse(jsonResStaus);
-                    // console.log(a);
-                    if (jsonResStaus === "DONE") {
-
+                let intervalId = setInterval(async () => {
+                    const resStatus = await fetch(`/assignments/get_status/` + storedTask)
+                        .then((body) => {
+                            return (body.text());
+                        });
+                    console.log("Status: " + resStatus);
+                    if (resStatus === "DONE") {
+                        clearInterval(intervalId);
                         //  popUp();
                         //showAssignment();
                     }
