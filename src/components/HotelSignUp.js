@@ -11,7 +11,6 @@ import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useLocation, useNavigate} from 'react-router-dom';
 
-
 export default function HotelSignUp() {
 
     const [errorMessages, setErrorMessages] = useState("");

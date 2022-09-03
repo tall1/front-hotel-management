@@ -15,6 +15,7 @@ import Checkbox from '@mui/material/Checkbox';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
+import React from 'react';
 
 export default function Settings(props) {
 

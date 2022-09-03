@@ -109,7 +109,7 @@ export default function LoadFile() {
 
 //     console.log('3');
 
-//     await fetch('http://localhost:8080/reservations/insert/reservation_list', {  
+//     await fetch('http://localhost:8080/reservations/insert/reservation_list', {
 //         method: 'POST',
 //         headers: {
 //             'Accept': 'application/json',
