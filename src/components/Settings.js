@@ -127,14 +127,14 @@ export default function Settings(props) {
         event.preventDefault();
 
         const data = new FormData(event.currentTarget);
-        const res = await fetch('http://localhost:8080/users/get_id_by_email?email=' + props.userid);
+        const res = await fetch('/users/get_id_by_email?email=' + props.userid);
         const userId = await res.json();
         if (checkValidity(data)) {
             console.log(data.get('strategy'));
             console.log(props.userid);
             console.log(userId);
 
-            await fetch('http://localhost:8080/task', {
+            await fetch('/task', {
                 method: 'POST',
                 headers: {
                     'Accept': 'application/json',
@@ -169,7 +169,7 @@ export default function Settings(props) {
 
                 let interval = setInterval(async () => {
 
-                    const resStatus = await fetch(`http://localhost:8080/assignments/get_status/` + storedTask);
+                    const resStatus = await fetch(`/assignments/get_status/` + storedTask);
                     const jsonResStaus = await resStatus.json();
                     //  const a = JSON.parse(jsonResStaus);
                     // console.log(a);

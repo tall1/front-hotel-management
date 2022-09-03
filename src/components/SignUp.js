@@ -22,7 +22,7 @@ export default function SignUp() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        fetch('http://localhost:8080/users', {
+        fetch('/users', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',

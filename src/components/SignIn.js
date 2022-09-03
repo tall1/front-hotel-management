@@ -22,7 +22,7 @@ export default function SignIn() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        const res = await fetch('http://localhost:8080/users/verify_email_password?email=' + data.get('email') + '&password=' + data.get('password'));
+        const res = await fetch('/users/verify_email_password?email=' + data.get('email') + '&password=' + data.get('password'));
         console.log({res});
         const isExist = await res.json();
         if (isExist === false) {

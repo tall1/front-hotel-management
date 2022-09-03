@@ -409,7 +409,7 @@ export default ResponsiveAppBar;
 
 // //      useEffect(() => {
 // //         const fetchData = async () => {
-// //           const res= await fetch('http://localhost:8080/hotels/');
+// //           const res= await fetch('/hotels/');
 // //          const data = await res.json();
 // //          setHotels(data);
 // //         }
@@ -426,7 +426,7 @@ export default ResponsiveAppBar;
 // //     const handleSubmit = async (event) => {
 // //         event.preventDefault();
 
-// //             const res= await fetch('http://localhost:8080/users/' +userId);
+// //             const res= await fetch('/users/' +userId);
 // //             console.log({res});
 // //             // if ( res === null)
 // //             // {
