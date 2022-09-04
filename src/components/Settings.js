@@ -127,13 +127,8 @@ export default function Settings(props) {
         event.preventDefault();
 
         const data = new FormData(event.currentTarget);
-        const res = await fetch('/users/get_id_by_email?email=' + props.userid);
-        const userId = await res.json();
         if (checkValidity(data)) {
-            console.log(data.get('strategy'));
-            console.log(props.userid);
-            console.log(userId);
-
+            console.log("Valid request. userid: " + sessionStorage.getItem("userId"))
             await fetch('/task', {
                 method: 'POST',
                 headers: {
@@ -142,8 +137,10 @@ export default function Settings(props) {
                 },
                 body: JSON.stringify({
                     taskId: '',
-                    userId: userId,
+                    userId: sessionStorage.getItem("userId"),
                     date: date.toISOString().split('T')[0],
+                    elitism: 5,
+                    populationSize: 50,
                     mutationProb: parseFloat(data.get('Mutation probebilty'), 10),
                     selectionStrategy: parseInt(data.get('strategy'), 10),
                     selecDouble: data.get('selection') ? parseFloat(data.get('selection'), 10) : 0.0,
@@ -166,12 +163,9 @@ export default function Settings(props) {
 
 
                 let intervalId = setInterval(async () => {
-                    const resStatus = await fetch(`/assignments/get_status/` + curTaskID)
-                        .then((body) => {
-                            return (body.text());
-                        });
-                    console.log("Status: " + resStatus);
-                    if (resStatus === "DONE" || resStatus === "done" ) {
+                    const resStatus = await fetch(`/assignments/get_status/` + curTaskID).then(response => response.json());
+                    console.log("Status: " + JSON.stringify(resStatus));
+                    if (resStatus.statusStr === "DONE" || resStatus.statusStr === "done") {
                         clearInterval(intervalId);
                         //  popUp();
                         //showAssignment();
