@@ -1,5 +1,4 @@
 import {useEffect, useState} from 'react';
-import {useLocation} from 'react-router';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import {Link} from 'react-router-dom';
@@ -42,11 +41,10 @@ const customColumnStyle = {maxWidth: "100px", backgroundColor: "#1976D2", paddin
 
 
 export default function Rooms1() {
-    const {state} = useLocation();
     const [rooms, setRooms] = useState(null);
 
     useEffect(() => {
-        fetch("/rooms/")
+        fetch("/rooms/get_rooms_by_user_id/" + sessionStorage.getItem("userId"))
             .then((res) => {
                 return res.json()
             })

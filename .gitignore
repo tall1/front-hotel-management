@@ -19,6 +19,7 @@
 .env.production.local
 .idea
 front-hotel-management.iml
+launch.json
 
 npm-debug.log*
 yarn-debug.log*
