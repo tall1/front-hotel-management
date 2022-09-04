@@ -18,8 +18,9 @@ import LoadFile from './LoadFile';
 import Assignment from './Assignment';
 import Info from './Info';
 import Rooms from './Rooms1';
+import Reservations from './Reservations1';
 
-const pages = ['Update Settings and start algorithm | ', 'Upload Data | ',  'Show Assignment | ', 'Rooms | '];
+const pages = ['Update Settings and start algorithm | ', 'Upload Data | ',  'Show Assignment | ', 'Rooms | ', 'Reservations | '];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const ResponsiveAppBar = () => {
@@ -70,8 +71,6 @@ const ResponsiveAppBar = () => {
                         <Assignment/>
                     </div>
                 );
-
-                break;
             case "Rooms":
                 return (
                     <div>
@@ -79,9 +78,13 @@ const ResponsiveAppBar = () => {
                         <Rooms/>
                     </div>
                 );
-
-                break;
-
+            case "Reservations":
+                return (
+                    <div>
+                        <br/>
+                        <Reservations/>
+                    </div>
+                );
             default :
                 return (
                     <div>
