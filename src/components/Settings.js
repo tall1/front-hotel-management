@@ -150,7 +150,6 @@ export default function Settings(props) {
                     maxDuration: data.get('max duration') ? parseInt(data.get('max duration'), 10) : 0,
                     generationCount: data.get('generation count') ? parseInt(data.get('generation count'), 10) : 0,
                     generationLimit: data.get('generation limit') ? parseInt(data.get('generation limit'), 10) : 0,
-                    naturalFitness: true,
                     targetFitness: data.get('target fitness') ? parseFloat(data.get('target fitness'), 10) : 0.0,
                     terminationElapsedTime: checked1 ? 1 : 0,
                     terminationGenerationCount: checked2 ? 1 : 0,
@@ -159,30 +158,25 @@ export default function Settings(props) {
                     terminationUserAbort: 0
                 })
             }).then(async function (response) {
-
                 var resJson = await response.json();
-                sessionStorage.setItem("task", JSON.stringify(resJson));
-                var storedTask = JSON.parse(sessionStorage.getItem("task"));
-                console.log(storedTask);
+                sessionStorage.setItem("curTaskID", JSON.stringify(resJson));
+                var curTaskID = JSON.parse(sessionStorage.getItem("curTaskID"));
+                console.log(curTaskID);
                 //popUp();
 
 
                 let intervalId = setInterval(async () => {
-                    const resStatus = await fetch(`/assignments/get_status/` + storedTask)
+                    const resStatus = await fetch(`/assignments/get_status/` + curTaskID)
                         .then((body) => {
                             return (body.text());
                         });
                     console.log("Status: " + resStatus);
-                    if (resStatus === "DONE") {
+                    if (resStatus === "DONE" || resStatus === "done" ) {
                         clearInterval(intervalId);
                         //  popUp();
                         //showAssignment();
                     }
                 }, 2000);
-
-                // return () => {
-                //     clearInterval(interval);
-                // };
             })
                 .catch(function (error) {
                     console.log(error);
@@ -350,7 +344,7 @@ export default function Settings(props) {
                             <br></br>
                             <DesktopDatePicker
                                 label="Date"
-                                inputFormat="MM/dd/yyyy"
+                                inputFormat="dd/MM/yyyy"
                                 value={date}
                                 onChange={handleDateChange}
                                 renderInput={(params) => <TextField {...params} />}

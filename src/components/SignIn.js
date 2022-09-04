@@ -23,18 +23,18 @@ export default function SignIn() {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const res = await fetch('/users/verify_email_password?email=' + data.get('email') + '&password=' + data.get('password'));
-        console.log({res});
         const isExist = await res.json();
         if (isExist === false) {
             document.getElementById('errorlabel').removeAttribute('hidden');
         } else {
+            const userId = await fetch('/users/get_id_by_email?email=' + data.get('email')).then(response => response.json());
+            sessionStorage.setItem("userId", userId);
             navigate("/Login", {state: data.get('email')}); // Tocheck
-
         }
-        console.log({
+/*        console.log({
             username: data.get('email'),
             password: data.get('password'),
-        });
+        });*/
     };
 
 
@@ -92,7 +92,7 @@ export default function SignIn() {
                             </Button>
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
-                                    <Link href="/signup" variant="body2">
+                                    <Link href="./signup" variant="body2">
                                         {"Don't have an account? Sign Up"}
                                     </Link>
                                 </Grid>
