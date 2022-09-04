@@ -10,6 +10,7 @@ export default function Assignment() {
     const [assign, setAssign] = useState([]);
     const [buttonClicked, setButtonClicked] = useState(false);
 
+    // TODO: do I need this function?
     useEffect(() => {
         let intervalId = setInterval(async () => {
             var curTaskID = JSON.parse(sessionStorage.getItem("curTaskID"));
@@ -19,7 +20,7 @@ export default function Assignment() {
                         return (body.text());
                     });
                 if (res === "DONE") {
-                    alert("your assignment is ready - go to check it");
+                    //alert("your assignment is ready - go to check it");
                     clearInterval(intervalId);
                     //showAssignment();
                 }
@@ -49,17 +50,16 @@ export default function Assignment() {
 
     const handleClick = async (event) => {
         event.preventDefault();
-
-        console.log(state.userId);
-        const res = await fetch("/assignments/byDate?userId=" + state.userId + "&day=5&month=8&year=2022");
-        const data = await res.json();
-        console.log({data});
-        const key = Object.entries(data.reservationRoomHashMap);
+        console.log("curTaskID: " + sessionStorage.getItem("curTaskID"));
+        const res = await fetch("/assignments/get_assignment/" + sessionStorage.getItem("curTaskID"))
+            .then((response) => response.json())
+            .then((data) => data.reservationRoomMap);
+        console.log(res);
+        //const res = await fetch("/assignments/byDate?userId=" + state.userId + "&day=5&month=8&year=2022");
+        const key = Object.entries(res);
         setAssign(key);
-        console.log(key);
         setButtonClicked(true);
     }
-    console.log({assign});
     return (
         <div className='Assignment'>
             <header>Assignment</header>

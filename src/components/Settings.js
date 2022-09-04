@@ -158,7 +158,6 @@ export default function Settings(props) {
                     terminationUserAbort: 0
                 })
             }).then(async function (response) {
-
                 var resJson = await response.json();
                 sessionStorage.setItem("curTaskID", JSON.stringify(resJson));
                 var curTaskID = JSON.parse(sessionStorage.getItem("curTaskID"));
