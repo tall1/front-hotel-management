@@ -29,7 +29,8 @@ export default function Settings(props) {
     const [status, setStatus] = useState({
         "statusId": 0,
         "statusStr": "",
-        "bestFitness": 0,
+        "maxFitness": 0,
+        "curFitness": 0,
         "curGeneration": 0,
         "elapsedTime": 0
     });
@@ -379,7 +380,8 @@ export default function Settings(props) {
                                 <thead>
                                 <tr>
                                     <th>status</th>
-                                    <th>best fitness</th>
+                                    <th>max fitness</th>
+                                    <th>current fitness</th>
                                     <th>current generation</th>
                                     <th>elapsed time</th>
                                 </tr>
@@ -387,7 +389,8 @@ export default function Settings(props) {
                                 <tbody>
                                 <tr key={status.statusId}>
                                     <td> {status.statusStr.toLowerCase()}</td>
-                                    <td> {status.bestFitness}</td>
+                                    <td> {status.maxFitness}</td>
+                                    <td> {status.curFitness}</td>
                                     <td> {status.curGeneration}</td>
                                     <td> {status.elapsedTime}</td>
                                 </tr>
