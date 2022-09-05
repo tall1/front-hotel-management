@@ -91,6 +91,11 @@ export default function Settings(props) {
             setErrorMessages({name: "truncation", message: errors.truncation});
             ok = false;
         }
+        if (!checked1 && !checked2 && !checked3 && !checked4)
+        {
+            setErrorMessages({ name: "terminationCondition", message: errors.terminationCondition});   
+            ok=false;
+        }
 
         return ok;
 
