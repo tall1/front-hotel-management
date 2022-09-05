@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Button, FormControlLabel, FormGroup} from '@mui/material';
+import {Button, FormControlLabel, FormGroup, Stack} from '@mui/material';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -19,13 +19,20 @@ import React from 'react';
 
 export default function Settings(props) {
 
-    const [selectionStrategy, setselectionStrategy] = useState("");
+    const [selectionStrategy, setSelectionStrategy] = useState("");
     const [errorMessages, setErrorMessages] = useState("");
     const theme = useTheme();
     const [checked1, setChecked1] = useState(false);
     const [checked2, setChecked2] = useState(false);
     const [checked3, setChecked3] = useState(false);
     const [checked4, setChecked4] = useState(false);
+    const [status, setStatus] = useState({
+        "statusId": 0,
+        "statusStr": "",
+        "bestFitness": 0,
+        "curGeneration": 0,
+        "elapsedTime": 0
+    });
     const [date, setDate] = useState(new Date());
 
 
@@ -60,8 +67,8 @@ export default function Settings(props) {
     };
 
     const onChangeSelection = (event) => {
-        var elem = document.getElementById('selection');
-        setselectionStrategy(event.target.value);
+        let elem = document.getElementById('selection');
+        setSelectionStrategy(event.target.value);
         if (event.target.value === 5 || event.target.value === 6) {
             elem.disabled = false;
             elem.variant = 'outlined';
@@ -87,7 +94,7 @@ export default function Settings(props) {
 
             }
         }
-        if (parseFloat(data.get('Mutation probebilty'), 10) > 1 || parseFloat(data.get('Mutation probebilty'), 10) < 0) {
+        if (parseFloat(data.get('Mutation probability'), 10) > 1 || parseFloat(data.get('Mutation probability'), 10) < 0) {
             setErrorMessages({name: "truncation", message: errors.truncation});
             ok = false;
         }
@@ -139,10 +146,10 @@ export default function Settings(props) {
                     taskId: '',
                     userId: sessionStorage.getItem("userId"),
                     date: date.toISOString().split('T')[0],
-                    elitism: 5,
-                    populationSize: 50,
-                    mutationProb: parseFloat(data.get('Mutation probebilty'), 10),
-                    selectionStrategy: parseInt(data.get('strategy'), 10),
+                    elitism: data.get('elitism') ? parseInt(data.get('elitism'), 10) : 0,
+                    populationSize: data.get('population_size') ? parseInt(data.get('population_size'), 10) : 0,
+                    mutationProb: parseFloat(data.get('Mutation probability'), 10),
+                    selectionStrategy: selectionStrategy,
                     selecDouble: data.get('selection') ? parseFloat(data.get('selection'), 10) : 0.0,
                     maxDuration: data.get('max duration') ? parseInt(data.get('max duration'), 10) : 0,
                     generationCount: data.get('generation count') ? parseInt(data.get('generation count'), 10) : 0,
@@ -165,21 +172,20 @@ export default function Settings(props) {
                 let intervalId = setInterval(async () => {
                     const resStatus = await fetch(`/assignments/get_status/` + curTaskID).then(response => response.json());
                     console.log("Status: " + JSON.stringify(resStatus));
+                    setStatus(resStatus);
                     if (resStatus.statusStr === "DONE" || resStatus.statusStr === "done") {
                         clearInterval(intervalId);
                         //  popUp();
                         //showAssignment();
                     }
-                }, 2000);
+                }, 100);
             })
                 .catch(function (error) {
                     console.log(error);
                 });
-
         }
     }
     return (
-
         <form onSubmit={handleSubmit}>
             {/* <ToastContainer
           position="top-right"
@@ -222,129 +228,143 @@ export default function Settings(props) {
                         <Typography component="h1" variant="h5">
                             Settings
                         </Typography>
-                        <header>please select the setting of the evoluntary engine:</header>
-                        <label>Mutation probebilty: </label>
-                        <TextField
-                            required
-                            margin="normal"
-                            id="Mutation probebilty"
-                            label="Mutation probebilty"
-                            name="Mutation probebilty"
-                            autoComplete="Mutation probebilty"
-                            inputProps={{pattern: "[0-9][0-9.]*[0-9]"}}
-                            autoFocus
-                            variant="filled"
-                        />
-                        {renderErrorMessage("truncation")}
-                        {renderErrorMessage("tournament")}
-                        <FormControl required sx={{m: 1, minWidth: 200}}>
-                            <InputLabel>Selection Strategy</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-disabled-label"
-                                id="strategy"
-                                name="strategy"
-                                value={selectionStrategy}
-                                label="Selection strategy*"
-                                onChange={onChangeSelection}
-                            >
-                                {/* add info of each one */}
-                                <MenuItem value={1}>Rank Selection</MenuItem>
-                                <MenuItem value={2}>Roulette Wheel Selection</MenuItem>
-                                <MenuItem value={3}>Sigma Scaling</MenuItem>
-                                <MenuItem value={4}>Stochastic Universal Sampling</MenuItem>
-                                <MenuItem value={5}>Tournament Selection</MenuItem>
-                                <MenuItem value={6}>Truncation Selection</MenuItem>
-                            </Select>
-                            <FormHelperText>Required</FormHelperText>
+                        <header>please select the setting of the evolutionary engine:</header>
+                        <Stack spacing={1}>
+                            <label>Mutation probability: </label>
                             <TextField
                                 required
                                 margin="normal"
-                                fullWidth
-                                id="selection"
-                                label="selection"
-                                name="selection"
-                                autoComplete="selection"
+                                id="Mutation probability"
+                                label="Mutation probability"
+                                name="Mutation probability"
+                                autoComplete="Mutation probability"
                                 inputProps={{pattern: "[0-9][0-9.]*[0-9]"}}
-                                disabled={true}
                                 autoFocus
                                 variant="filled"
                             />
                             {renderErrorMessage("truncation")}
-                        </FormControl>
-                        <FormGroup>
-                            <FormControlLabel
-                                control={<Checkbox
-                                    id="1"
-                                    checked={checked1}
-                                    onChange={handleChange}
-                                    inputProps={{"aria-label": "primary checkbox"}}
-                                />}
-                                label="Max duration"/>
-                            <TextField
-                                inputProps={{inputMode: 'numeric', pattern: "[0-9]*"}}
-                                fullWidth
-                                name='max duration'
-                                disabled={!checked1}
-                                label="please enter the max duration"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox
-                                    id="2"
-                                    checked={checked2}
-                                    onChange={handleChange}
-                                    inputProps={{"aria-label": "primary checkbox"}}
-                                />}
-                                label="generation count"/>
-                            <TextField
-                                inputProps={{inputMode: 'numeric', pattern: "[0-9]"}}
-                                fullWidth
-                                name="generation count"
-                                disabled={!checked2}
-                                label="please enter the number of generation"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox
-                                    id="3"
-                                    checked={checked3}
-                                    onChange={handleChange}
-                                    inputProps={{"aria-label": "primary checkbox"}}
-                                />}
-                                label="Stagnation"/>
-                            <TextField
-                                inputProps={{inputMode: 'numeric', pattern: "[0-9]"}}
-                                fullWidth
-                                name='generation limit'
-                                disabled={!checked3}
-                                label="please enter the limit number of generation"
-                            />
-                            <FormControlLabel
-                                control={<Checkbox
-                                    id="4"
-                                    checked={checked4}
-                                    onChange={handleChange}
-                                    inputProps={{"aria-label": "primary checkbox"}}
-                                />}
-                                label="Target fitness"/>
-                            <TextField
-                                inputProps={{inputMode: 'numeric', pattern: "[0-9]"}}
-                                fullWidth
-                                name="target fitness"
-                                disabled={!checked4}
-                                label="please enter the target fitness"
-                            />
-                        </FormGroup>
-                        <LocalizationProvider dateAdapter={AdapterDateFns}>
-                            {/* <Stack spacing={3}> */}
-                            <br></br>
-                            <DesktopDatePicker
-                                label="Date"
-                                inputFormat="dd/MM/yyyy"
-                                value={date}
-                                onChange={handleDateChange}
-                                renderInput={(params) => <TextField {...params} />}
-                            />
-                        </LocalizationProvider>
-
+                            {renderErrorMessage("tournament")}
+                            <FormControl required sx={{m: 1, minWidth: 200}}>
+                                <InputLabel>Selection Strategy</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-disabled-label"
+                                    id="strategy"
+                                    name="strategy"
+                                    value={selectionStrategy}
+                                    label="Selection strategy*"
+                                    onChange={onChangeSelection}
+                                >
+                                    {/* add info of each one */}
+                                    <MenuItem value={1}>Rank Selection</MenuItem>
+                                    <MenuItem value={2}>Roulette Wheel Selection</MenuItem>
+                                    <MenuItem value={3}>Sigma Scaling</MenuItem>
+                                    <MenuItem value={4}>Stochastic Universal Sampling</MenuItem>
+                                    <MenuItem value={5}>Tournament Selection</MenuItem>
+                                    <MenuItem value={6}>Truncation Selection</MenuItem>
+                                </Select>
+                                <FormHelperText>Required</FormHelperText>
+                                <TextField
+                                    required
+                                    margin="normal"
+                                    fullWidth
+                                    id="selection"
+                                    label="selection"
+                                    name="selection"
+                                    autoComplete="selection"
+                                    inputProps={{pattern: "[0-9][0-9.]*[0-9]"}}
+                                    disabled={true}
+                                    autoFocus
+                                    variant="filled"
+                                />
+                                {renderErrorMessage("truncation")}
+                            </FormControl>
+                            <FormGroup>
+                                <Stack spacing={1}>
+                                    <FormControlLabel
+                                        control={<Checkbox
+                                            id="1"
+                                            checked={checked1}
+                                            onChange={handleChange}
+                                            inputProps={{"aria-label": "primary checkbox"}}
+                                        />}
+                                        label="Max duration"/>
+                                    <TextField
+                                        inputProps={{inputMode: 'numeric', pattern: "[0-9]*"}}
+                                        fullWidth
+                                        name='max duration'
+                                        disabled={!checked1}
+                                        label="please enter the max duration"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox
+                                            id="2"
+                                            checked={checked2}
+                                            onChange={handleChange}
+                                            inputProps={{"aria-label": "primary checkbox"}}
+                                        />}
+                                        label="generation count"/>
+                                    <TextField
+                                        inputProps={{inputMode: 'numeric', pattern: "[0-9]*"}}
+                                        fullWidth
+                                        name="generation count"
+                                        disabled={!checked2}
+                                        label="please enter the number of generation"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox
+                                            id="3"
+                                            checked={checked3}
+                                            onChange={handleChange}
+                                            inputProps={{"aria-label": "primary checkbox"}}
+                                        />}
+                                        label="Stagnation"/>
+                                    <TextField
+                                        inputProps={{inputMode: 'numeric', pattern: "[0-9]*"}}
+                                        fullWidth
+                                        name='generation limit'
+                                        disabled={!checked3}
+                                        label="please enter the limit number of generation"
+                                    />
+                                    <FormControlLabel
+                                        control={<Checkbox
+                                            id="4"
+                                            checked={checked4}
+                                            onChange={handleChange}
+                                            inputProps={{"aria-label": "primary checkbox"}}
+                                        />}
+                                        label="Target fitness"/>
+                                    <TextField
+                                        inputProps={{inputMode: 'numeric', pattern: "[0-9]*"}}
+                                        fullWidth
+                                        name="target fitness"
+                                        disabled={!checked4}
+                                        label="please enter the target fitness"
+                                    />
+                                    <TextField
+                                        inputProps={{inputMode: 'numeric', pattern: "[0-9]*"}}
+                                        fullWidth
+                                        name='elitism'
+                                        label="please enter the elitism"
+                                    />
+                                    <TextField
+                                        inputProps={{inputMode: 'numeric', pattern: "[0-9]*"}}
+                                        fullWidth
+                                        name='population_size'
+                                        label="please enter the population size"
+                                    />
+                                </Stack>
+                            </FormGroup>
+                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                <br></br>
+                                <DesktopDatePicker
+                                    label="Date"
+                                    inputFormat="dd/MM/yyyy"
+                                    value={date}
+                                    onChange={handleDateChange}
+                                    renderInput={(params) => <TextField {...params} />}
+                                />
+                            </LocalizationProvider>
+                        </Stack>
                         {/* </FormControl> */}
                         <Button
                             type="submit"
@@ -354,6 +374,26 @@ export default function Settings(props) {
                         >
                             submit and start the algorithm
                         </Button>
+                        {<div>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>status</th>
+                                    <th>best fitness</th>
+                                    <th>current generation</th>
+                                    <th>elapsed time</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr key={status.statusId}>
+                                    <td> {status.statusStr.toLowerCase()}</td>
+                                    <td> {status.bestFitness}</td>
+                                    <td> {status.curGeneration}</td>
+                                    <td> {status.elapsedTime}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>}
                     </Box>
                 </Container>
             </ThemeProvider>

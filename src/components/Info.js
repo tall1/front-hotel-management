@@ -28,7 +28,7 @@ export default function Info(props) {
         <div className="Info">
 
             <h1> hello user</h1>
-            {/* hello {userData.id} ! welcome to the evoluntary system */}
+            {/* hello {userData.id} ! welcome to the evolutionary system */}
             {/* your hotel: {hotelData.hotelName}
         numberoffloors :{hotelData.numOfFloors}
         numberofrooms :{hotelData.numOfRooms} */}
