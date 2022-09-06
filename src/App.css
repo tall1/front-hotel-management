@@ -44,3 +44,11 @@
 .error {
     color:crimson;
 }
+
+.chart {
+    display: block;
+}
+
+.hide-chart {
+    opacity: 0;
+}
