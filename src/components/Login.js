@@ -29,8 +29,6 @@ const ResponsiveAppBar = () => {
     const [currentItem, setCurrentItem] = React.useState("");
 
 
-    const {state} = useLocation();
-
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -56,7 +54,7 @@ const ResponsiveAppBar = () => {
             case "Update Settings and start algorithm" :
                 return (
                     <div>
-                        <Settings userid={state}/>
+                        <Settings/>
                     </div>
                 );
             case  "Upload Data":
@@ -88,7 +86,7 @@ const ResponsiveAppBar = () => {
             default :
                 return (
                     <div>
-                        <Info userid={state}/>
+                        <Info /> 
                     </div>
                 );
 
@@ -105,7 +103,7 @@ const ResponsiveAppBar = () => {
                             variant="h6"
                             noWrap
                             component="a"
-                            href="/"
+                            href="/Login"
                             sx={{
                                 mr: 2,
                                 display: {xs: 'none', md: 'flex'},
@@ -161,7 +159,7 @@ const ResponsiveAppBar = () => {
                             variant="h5"
                             noWrap
                             component="a"
-                            href=""
+                            href="/Login"
                             sx={{
                                 mr: 2,
                                 display: {xs: 'flex', md: 'none'},
