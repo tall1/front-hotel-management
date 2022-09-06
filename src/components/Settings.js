@@ -402,7 +402,3 @@ export default function Settings(props) {
         </form>
     );
 }
-   
-
-    
-
