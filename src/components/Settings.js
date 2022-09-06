@@ -169,7 +169,6 @@ export default function Settings(props) {
                 console.log(curTaskID);
                 //popUp();
 
-
                 let intervalId = setInterval(async () => {
                     const resStatus = await fetch(`/assignments/get_status/` + curTaskID).then(response => response.json());
                     console.log("Status: " + JSON.stringify(resStatus));
