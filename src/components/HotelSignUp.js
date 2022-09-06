@@ -26,9 +26,10 @@ export default function HotelSignUp() {
         const data = new FormData(event.currentTarget);
 
 
-        const res = await fetch('/users/get_id_by_email?email=' + state);
-        console.log({res});
+         const res = await fetch('/users/get_id_by_email?email=' + state);
+         console.log({res});
         const userId = await res.json();
+        sessionStorage.setItem("userId", userId);
 
         fetch('/hotels', {
             method: 'POST',
@@ -48,7 +49,7 @@ export default function HotelSignUp() {
                 document.getElementById('errorlabel').removeAttribute('hidden');
             } else {
                 document.getElementById('errorlabel').setAttribute('hidden', 'hidden');
-                navigate("/Login", {state: userId});
+                navigate("/Login");
             }
             return response.json();
         });

@@ -1,37 +1,51 @@
-import * as React from 'react';
 
-export default function Info(props) {
+import React from 'react';
 
-    const [hotelData, setHotelData] = React.useState(null);
-    const [userData, setUserData] = React.useState(null);
+import { useEffect, useState } from 'react';
 
-//     useEffect(()  => {
-//         //const fetchData = async () => {
-//         //save on session
-//             const res=  fetch('/users/get_id_by_email?email=' +props.userid);
-//             const userId =  res.json();
-//             const userres=  fetch('/users/' +userId);
-//             const user =  userres.json();
-//             setUserData(user);
-//             const hotelId = user.hotelId;
-//             const hotelres= fetch('/hotels/' +hotelId);
-//             const hotel =  hotelres.json();
-//             setHotelData(hotel);
-//         }
-//    //     fetchData()
-//           // make sure to catch any error
-//       //    .catch(console.error);
-//       ,[])
+export default function Info() {
+
+     const [hotelData, setHotelData] = useState(null);
+     const [userData, setUserData] = useState(null);
+
+    useEffect(() => {
+             fetch('/users/' + sessionStorage.getItem("userId"))
+             .then((res) => {
+                    return res.json()
+            })
+            .then((user) => {
+                setUserData(user)
+
+                fetch('/hotels/' + user.hotelId)
+                .then((res) => {
+                   return res.json()
+               })
+               .then((hotel) => {
+                   setHotelData(hotel)
+               });
+
+            });
+
+    }, []);
+
+  
+    if (!hotelData || !userData) return;
 
 
     return (
-        <div className="Info">
-
-            <h1> hello user</h1>
-            {/* hello {userData.id} ! welcome to the evoluntary system */}
-            {/* your hotel: {hotelData.hotelName}
-        numberoffloors :{hotelData.numOfFloors}
-        numberofrooms :{hotelData.numOfRooms} */}
+        <div>
+            <h1>
+            {/* hello {userData.email} ! */}
+            </h1>
+            <br></br>
+             welcome to the evoluntary system 
+            <br></br>
+             your hotel: {hotelData.hotelName}
+             <br></br>
+        number of floors :{hotelData.numOfFloors}
+        <br></br>
+        number of rooms :{hotelData.numOfRooms}
+        
 
         </div>
     );

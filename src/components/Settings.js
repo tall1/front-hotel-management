@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {Button, FormControlLabel, FormGroup} from '@mui/material';
+import {AppBar, Button, FormControlLabel, FormGroup} from '@mui/material';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -15,7 +15,10 @@ import Checkbox from '@mui/material/Checkbox';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
+import Tooltip from '@mui/material/Tooltip';
 import React from 'react';
+import { Stack } from '@mui/system';
+ import '../App.css';
 
 export default function Settings(props) {
 
@@ -27,7 +30,11 @@ export default function Settings(props) {
     const [checked3, setChecked3] = useState(false);
     const [checked4, setChecked4] = useState(false);
     const [date, setDate] = useState(new Date());
+    const [tooltipOpen, setTooltipOpen] = useState(false)
 
+    const handleTooltip = (bool) => {
+        setTooltipOpen(bool)
+    }
 
     const handleDateChange = (newValue) => {
         setDate(newValue);
@@ -56,12 +63,14 @@ export default function Settings(props) {
     const errors = {
         tournament: "The value must be between 0.5 - 1",
         truncation: "The value must be between 0 - 1",
+        terminationCondition: " You must choose one of the termination condition",
 
     };
 
     const onChangeSelection = (event) => {
         var elem = document.getElementById('selection');
         setselectionStrategy(event.target.value);
+        handleTooltip(false);
         if (event.target.value === 5 || event.target.value === 6) {
             elem.disabled = false;
             elem.variant = 'outlined';
@@ -101,27 +110,6 @@ export default function Settings(props) {
 
     }
 
-
-    // const popUp = () => 
-    //     {
-    //         return(
-    //         <Alert
-    //         onClose={() => {}}
-    //         action={
-    //             <Link to= "/assign">
-    //           <Button color="inherit" size="small">
-    //             go to check it
-    //           </Button>  
-    //           </Link>
-    //         }
-
-    //       >
-    //         The assignment is ready!
-    //       </Alert>
-    //         )
-    //     }
-
-
     const renderErrorMessage = (name) =>
         name === errorMessages.name && (
             <div className="error">{errorMessages.message}</div>
@@ -132,12 +120,12 @@ export default function Settings(props) {
         event.preventDefault();
 
         const data = new FormData(event.currentTarget);
-        const res = await fetch('/users/get_id_by_email?email=' + props.userid);
-        const userId = await res.json();
+        // const res = await fetch('/users/get_id_by_email?email=' + props.userid);
+        // const userId = await res.json();
         if (checkValidity(data)) {
             console.log(data.get('strategy'));
             console.log(props.userid);
-            console.log(userId);
+            console.log(sessionStorage.getItem("userId"));
 
             await fetch('/task', {
                 method: 'POST',
@@ -147,7 +135,7 @@ export default function Settings(props) {
                 },
                 body: JSON.stringify({
                     taskId: '',
-                    userId: userId,
+                    userId: sessionStorage.getItem("userId"),
                     date: date.toISOString().split('T')[0],
                     mutationProb: parseFloat(data.get('Mutation probebilty'), 10),
                     selectionStrategy: parseInt(data.get('strategy'), 10),
@@ -167,19 +155,20 @@ export default function Settings(props) {
                 sessionStorage.setItem("curTaskID", JSON.stringify(resJson));
                 var curTaskID = JSON.parse(sessionStorage.getItem("curTaskID"));
                 console.log(curTaskID);
-                //popUp();
-
 
                 let intervalId = setInterval(async () => {
-                    const resStatus = await fetch(`/assignments/get_status/` + curTaskID)
+                    const resStatus = await fetch(`/assignments/get_status/` + curTaskID ) 
                         .then((body) => {
                             return (body.text());
                         });
                     console.log("Status: " + resStatus);
                     if (resStatus === "DONE" || resStatus === "done" ) {
+                    const resAssign = await fetch("/assignments/get_assignment/" + curTaskID) 
+                    const jsonResAssign = await resAssign.json();
+                    sessionStorage.setItem("curAssign", JSON.stringify(jsonResAssign))
+                    alert("your assignment is ready - go to check it");
                         clearInterval(intervalId);
-                        //  popUp();
-                        //showAssignment();
+                    
                     }
                 }, 2000);
             })
@@ -191,49 +180,30 @@ export default function Settings(props) {
     }
     return (
 
-        <form onSubmit={handleSubmit}>
-            {/* <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          /> */}
+        <form  className="firstCol" onSubmit={handleSubmit}>
 
-            {/* <Alert
-        hidden
-            onClose={() => {}}
-            action={
-                <Link to= "/assign">
-              <Button color="inherit" size="small">
-                go to check it
-              </Button>  
-              </Link>
-            }
-            
-          >
-            The assignment is ready!
-          </Alert> */}
             <ThemeProvider theme={theme}>
-                <Container component="main" maxWidth="xs">
+                <Container component="main" maxWidth="xl">
                     <CssBaseline/>
-                    <Box
-                        sx={{
-                            marginTop: 8,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-
-                        <Typography component="h1" variant="h5">
+                    <Typography component="h1" variant="h5">
                             Settings
                         </Typography>
                         <header>please select the setting of the evoluntary engine:</header>
+                <Stack
+                    direction={{ xs: 'column', sm: 'row' }}
+                    spacing={{ xs: 1, sm: 2, md: 4 }}
+                >
+                    {/* <Box
+                        
+                        sx={{
+                            marginTop: 8,
+                            marginLeft:0,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'left',
+                            maxWidth:300
+                        }}
+                    >  */}
                         <label>Mutation probebilty: </label>
                         <TextField
                             required
@@ -248,31 +218,63 @@ export default function Settings(props) {
                         />
                         {renderErrorMessage("truncation")}
                         {renderErrorMessage("tournament")}
-                        <FormControl required sx={{m: 1, minWidth: 200}}>
+                        <FormControl required sx={{m: 1, minWidth: 300}}>
                             <InputLabel>Selection Strategy</InputLabel>
+                            <Tooltip
+                              disabletriggerfocus= "true"
+                              title= "Various selection strategies for use with evolutionary algorithms."
+                              placement="top"
+                              open={tooltipOpen}>
                             <Select
+                             
                                 labelId="demo-simple-select-disabled-label"
                                 id="strategy"
                                 name="strategy"
                                 value={selectionStrategy}
                                 label="Selection strategy*"
                                 onChange={onChangeSelection}
-                            >
-                                {/* add info of each one */}
+                                onMouseEnter={() => {handleTooltip(true)}}
+                                onMouseLeave={() => {handleTooltip(false)}}
+                             >   
+                             {/* <Tooltip placement="top" title="A selection strategy that is similar to fitness-proportionate selection except that is uses relative fitness rather than absolute fitness in order to determine the probability of selection for a given individual"> */}
+                                {/* <div> */}
                                 <MenuItem value={1}>Rank Selection</MenuItem>
+                                {/* </div> */}
+                                {/* </Tooltip> */}
+                             {/* <Tooltip placement="top" title="Implements selection of n candidates from a population by selecting n candidates at random where the probability of each candidate getting selected is proportional to its fitness score."> */}
+                                {/* <div> */}
                                 <MenuItem value={2}>Roulette Wheel Selection</MenuItem>
+                                {/* </div> */}
+                                {/* </Tooltip> */}
+                             {/* <Tooltip placement="top" title="An alternative to straightforward fitness-proportionate selection such as that offered by RouletteWheelSelection and StochasticUniversalSampling."> */}
+                                {/* <div> */}
                                 <MenuItem value={3}>Sigma Scaling</MenuItem>
+                                {/* </div> */}
+                                {/* </Tooltip> */}
+                             {/* <Tooltip placement="top" title="An alternative to RouletteWheelSelection as a fitness-proportionate selection strategy."> */}
+                                {/* <div> */}
                                 <MenuItem value={4}>Stochastic Universal Sampling</MenuItem>
+                                {/* </div> */}
+                                {/* </Tooltip> */}
+                             {/* <Tooltip placement="top" title="Selection strategy that picks a pair of candidates at random and then selects the fitter of the two candidates with probability p, where p is the configured selection probability (therefore the probability of the less fit candidate being selected is 1 - p)."> */}
+                                {/* <div> */}
                                 <MenuItem value={5}>Tournament Selection</MenuItem>
+                                {/* </div> */}
+                                {/* </Tooltip> */}
+                             {/* <Tooltip placement="top" title="Implements selection of n candidates from a population by simply selecting the n candidates with the highest fitness scores (the rest are discarded)."> */}
+                                {/* <div> */}
                                 <MenuItem value={6}>Truncation Selection</MenuItem>
+                                {/* </div> */}
+                                {/* </Tooltip> */}
                             </Select>
+                            </Tooltip>
                             <FormHelperText>Required</FormHelperText>
                             <TextField
                                 required
                                 margin="normal"
                                 fullWidth
                                 id="selection"
-                                label="selection"
+                                label="Selection"
                                 name="selection"
                                 autoComplete="selection"
                                 inputProps={{pattern: "[0-9][0-9.]*[0-9]"}}
@@ -282,7 +284,21 @@ export default function Settings(props) {
                             />
                             {renderErrorMessage("truncation")}
                         </FormControl>
+                        {/* </Box> */}
+                        
+                        {/* <Box
+                        
+                         sx={{
+                            marginTop: 0,
+                            marginLeft:70,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'left',
+                            maxWidth:300
+                        }}
+                        > */}
                         <FormGroup>
+                        <Tooltip placement="top" title="Terminates evolution after a pre-determined period of time has elapsed.">
                             <FormControlLabel
                                 control={<Checkbox
                                     id="1"
@@ -291,6 +307,8 @@ export default function Settings(props) {
                                     inputProps={{"aria-label": "primary checkbox"}}
                                 />}
                                 label="Max duration"/>
+                            </Tooltip>
+                           
                             <TextField
                                 inputProps={{inputMode: 'numeric', pattern: "[0-9]*"}}
                                 fullWidth
@@ -298,6 +316,7 @@ export default function Settings(props) {
                                 disabled={!checked1}
                                 label="please enter the max duration"
                             />
+                            <Tooltip placement="top" title="Terminates evolution after a set number of generations have passed.">
                             <FormControlLabel
                                 control={<Checkbox
                                     id="2"
@@ -306,6 +325,7 @@ export default function Settings(props) {
                                     inputProps={{"aria-label": "primary checkbox"}}
                                 />}
                                 label="generation count"/>
+                            </Tooltip>
                             <TextField
                                 inputProps={{inputMode: 'numeric', pattern: "[0-9]"}}
                                 fullWidth
@@ -313,6 +333,7 @@ export default function Settings(props) {
                                 disabled={!checked2}
                                 label="please enter the number of generation"
                             />
+                            <Tooltip placement="top" title="A Termination Condition that halts evolution if no improvement in fitness is observed within a specified number of generations.">
                             <FormControlLabel
                                 control={<Checkbox
                                     id="3"
@@ -321,6 +342,7 @@ export default function Settings(props) {
                                     inputProps={{"aria-label": "primary checkbox"}}
                                 />}
                                 label="Stagnation"/>
+                            </Tooltip>
                             <TextField
                                 inputProps={{inputMode: 'numeric', pattern: "[0-9]"}}
                                 fullWidth
@@ -328,6 +350,7 @@ export default function Settings(props) {
                                 disabled={!checked3}
                                 label="please enter the limit number of generation"
                             />
+                            <Tooltip placement="top" title="Terminates evolution once at least one candidate in the population has equalled or bettered a pre-determined fitness score.">
                             <FormControlLabel
                                 control={<Checkbox
                                     id="4"
@@ -336,6 +359,7 @@ export default function Settings(props) {
                                     inputProps={{"aria-label": "primary checkbox"}}
                                 />}
                                 label="Target fitness"/>
+                            </Tooltip>
                             <TextField
                                 inputProps={{inputMode: 'numeric', pattern: "[0-9]"}}
                                 fullWidth
@@ -343,6 +367,7 @@ export default function Settings(props) {
                                 disabled={!checked4}
                                 label="please enter the target fitness"
                             />
+                            {renderErrorMessage("terminationCondition")}
                         </FormGroup>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             {/* <Stack spacing={3}> */}
@@ -365,7 +390,10 @@ export default function Settings(props) {
                         >
                             submit and start the algorithm
                         </Button>
-                    </Box>
+                    {/* </Box> */}
+                    </Stack>
+                 
+                   
                 </Container>
             </ThemeProvider>
         </form>

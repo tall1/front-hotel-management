@@ -11,6 +11,9 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useNavigate} from 'react-router-dom';
+import '../App.css';
+import { color } from '@mui/system';
+
 
 
 export default function SignIn() {
@@ -27,9 +30,14 @@ export default function SignIn() {
         if (isExist === false) {
             document.getElementById('errorlabel').removeAttribute('hidden');
         } else {
-            const userId = await fetch('/users/get_id_by_email?email=' + data.get('email')).then(response => response.json());
-            sessionStorage.setItem("userId", userId);
-            navigate("/Login", {state: data.get('email')}); // Tocheck
+             const userId = await fetch('/users/get_id_by_email?email=' + data.get('email')).then(response => response.json());
+             sessionStorage.setItem("userId", userId);
+            // const userData = await fetch('/users/' + userId).then(response => response.json());
+            //  sessionStorage.setItem("userData", JSON.stringify(userData));
+            // const hotelData = await fetch('/hotels/' + userData.hotelId).then(response => response.json());
+            // sessionStorage.setItem("hotelData", JSON.stringify(hotelData));
+
+            navigate("/Login"); // Tocheck {state: data.get('email')}
         }
 /*        console.log({
             username: data.get('email'),
@@ -80,7 +88,7 @@ export default function SignIn() {
                                 id="password"
                                 autoComplete="current-password"
                             />
-                            <label hidden id="errorlabel">{error}</label>
+                            <label className = "error" hidden id="errorlabel">{error}</label>
 
                             <Button
                                 type="submit"
