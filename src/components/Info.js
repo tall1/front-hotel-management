@@ -23,7 +23,6 @@ export default function Info() {
                .then((hotel) => {
                    setHotelData(hotel)
                });
-
             });
 
     }, []);
@@ -45,7 +44,7 @@ export default function Info() {
         number of floors :{hotelData.numOfFloors}
         <br></br>
         number of rooms :{hotelData.numOfRooms}
-        
+
 
         </div>
     );

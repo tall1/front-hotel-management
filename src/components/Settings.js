@@ -1,5 +1,6 @@
 import {useState} from 'react';
 import {AppBar, Button, FormControlLabel, FormGroup} from '@mui/material';
+import {Button, FormControlLabel, FormGroup, Stack} from '@mui/material';
 import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -22,13 +23,21 @@ import { Stack } from '@mui/system';
 
 export default function Settings(props) {
 
-    const [selectionStrategy, setselectionStrategy] = useState("");
+    const [selectionStrategy, setSelectionStrategy] = useState("");
     const [errorMessages, setErrorMessages] = useState("");
     const theme = useTheme();
     const [checked1, setChecked1] = useState(false);
     const [checked2, setChecked2] = useState(false);
     const [checked3, setChecked3] = useState(false);
     const [checked4, setChecked4] = useState(false);
+    const [status, setStatus] = useState({
+        "statusId": 0,
+        "statusStr": "",
+        "maxFitness": 0,
+        "curFitness": 0,
+        "curGeneration": 0,
+        "elapsedTime": 0
+    });
     const [date, setDate] = useState(new Date());
     const [tooltipOpen, setTooltipOpen] = useState(false)
 
@@ -96,7 +105,7 @@ export default function Settings(props) {
 
             }
         }
-        if (parseFloat(data.get('Mutation probebilty'), 10) > 1 || parseFloat(data.get('Mutation probebilty'), 10) < 0) {
+        if (parseFloat(data.get('Mutation probability'), 10) > 1 || parseFloat(data.get('Mutation probability'), 10) < 0) {
             setErrorMessages({name: "truncation", message: errors.truncation});
             ok = false;
         }
@@ -120,13 +129,9 @@ export default function Settings(props) {
         event.preventDefault();
 
         const data = new FormData(event.currentTarget);
-        // const res = await fetch('/users/get_id_by_email?email=' + props.userid);
-        // const userId = await res.json();
-        if (checkValidity(data)) {
-            console.log(data.get('strategy'));
-            console.log(props.userid);
-            console.log(sessionStorage.getItem("userId"));
 
+        if (checkValidity(data)) {
+            console.log("Valid request. userid: " + sessionStorage.getItem("userId"));
             await fetch('/task', {
                 method: 'POST',
                 headers: {
@@ -137,8 +142,10 @@ export default function Settings(props) {
                     taskId: '',
                     userId: sessionStorage.getItem("userId"),
                     date: date.toISOString().split('T')[0],
-                    mutationProb: parseFloat(data.get('Mutation probebilty'), 10),
-                    selectionStrategy: parseInt(data.get('strategy'), 10),
+                    elitism: data.get('elitism') ? parseInt(data.get('elitism'), 10) : 0,
+                    populationSize: data.get('population_size') ? parseInt(data.get('population_size'), 10) : 0,
+                    mutationProb: parseFloat(data.get('Mutation probability'), 10),
+                    selectionStrategy: selectionStrategy,
                     selecDouble: data.get('selection') ? parseFloat(data.get('selection'), 10) : 0.0,
                     maxDuration: data.get('max duration') ? parseInt(data.get('max duration'), 10) : 0,
                     generationCount: data.get('generation count') ? parseInt(data.get('generation count'), 10) : 0,
@@ -157,44 +164,42 @@ export default function Settings(props) {
                 console.log(curTaskID);
 
                 let intervalId = setInterval(async () => {
-                    const resStatus = await fetch(`/assignments/get_status/` + curTaskID ) 
-                        .then((body) => {
-                            return (body.text());
-                        });
-                    console.log("Status: " + resStatus);
-                    if (resStatus === "DONE" || resStatus === "done" ) {
-                    const resAssign = await fetch("/assignments/get_assignment/" + curTaskID) 
-                    const jsonResAssign = await resAssign.json();
-                    sessionStorage.setItem("curAssign", JSON.stringify(jsonResAssign))
-                    alert("your assignment is ready - go to check it");
+                    const resStatus = await fetch(`/assignments/get_status/` + curTaskID).then(response => response.json());
+                    console.log("Status: " + JSON.stringify(resStatus));
+                    setStatus(resStatus);
+                    // Check if working on page change:
+                    //const resAssign = await fetch("/assignments/get_assignment/" + curTaskID) 
+                    //const jsonResAssign = await resAssign.json();
+                    //sessionStorage.setItem("curAssign", JSON.stringify(jsonResAssign))
+                    //alert("your assignment is ready - go to check it");
+                    if (resStatus.statusStr === "DONE" || resStatus.statusStr === "done") {
+
                         clearInterval(intervalId);
                     
                     }
-                }, 2000);
+                }, 100);
             })
                 .catch(function (error) {
                     console.log(error);
                 });
-
         }
     }
     return (
 
         <form  className="firstCol" onSubmit={handleSubmit}>
-
             <ThemeProvider theme={theme}>
                 <Container component="main" maxWidth="xl">
                     <CssBaseline/>
                     <Typography component="h1" variant="h5">
                             Settings
                         </Typography>
-                        <header>please select the setting of the evoluntary engine:</header>
-                <Stack
+                        <header>please select the setting of the evolutionary engine:</header>
+                        <Stack spacing={1}>
+                {/*<Stack
                     direction={{ xs: 'column', sm: 'row' }}
                     spacing={{ xs: 1, sm: 2, md: 4 }}
-                >
-                    {/* <Box
-                        
+                >*/}
+                    <Box 
                         sx={{
                             marginTop: 8,
                             marginLeft:0,
@@ -203,7 +208,8 @@ export default function Settings(props) {
                             alignItems: 'left',
                             maxWidth:300
                         }}
-                    >  */}
+                    >  
+                    
                         <label>Mutation probebilty: </label>
                         <TextField
                             required
@@ -278,7 +284,6 @@ export default function Settings(props) {
                                 name="selection"
                                 autoComplete="selection"
                                 inputProps={{pattern: "[0-9][0-9.]*[0-9]"}}
-                                disabled={true}
                                 autoFocus
                                 variant="filled"
                             />
@@ -298,6 +303,7 @@ export default function Settings(props) {
                         }}
                         > */}
                         <FormGroup>
+                        <Stack spacing={1}>
                         <Tooltip placement="top" title="Terminates evolution after a pre-determined period of time has elapsed.">
                             <FormControlLabel
                                 control={<Checkbox
@@ -368,6 +374,7 @@ export default function Settings(props) {
                                 label="please enter the target fitness"
                             />
                             {renderErrorMessage("terminationCondition")}
+                            </Stack>
                         </FormGroup>
                         <LocalizationProvider dateAdapter={AdapterDateFns}>
                             {/* <Stack spacing={3}> */}
@@ -380,7 +387,6 @@ export default function Settings(props) {
                                 renderInput={(params) => <TextField {...params} />}
                             />
                         </LocalizationProvider>
-
                         {/* </FormControl> */}
                         <Button
                             type="submit"
@@ -390,10 +396,30 @@ export default function Settings(props) {
                         >
                             submit and start the algorithm
                         </Button>
-                    {/* </Box> */}
-                    </Stack>
-                 
-                   
+
+                        {<div>
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>status</th>
+                                    <th>max fitness</th>
+                                    <th>current fitness</th>
+                                    <th>current generation</th>
+                                    <th>elapsed time</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr key={status.statusId}>
+                                    <td> {status.statusStr.toLowerCase()}</td>
+                                    <td> {status.maxFitness}</td>
+                                    <td> {status.curFitness}</td>
+                                    <td> {status.curGeneration}</td>
+                                    <td> {status.elapsedTime}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>}
+                    </Box>
                 </Container>
             </ThemeProvider>
         </form>
