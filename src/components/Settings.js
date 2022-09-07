@@ -25,7 +25,7 @@ import {
   YAxis,
 } from 'recharts';
 
-export default function Settings(props) {
+export default function Settings() {
   const [selectionStrategy, setSelectionStrategy] = useState('');
   const [errorMessages, setErrorMessages] = useState('');
   const theme = useTheme();
@@ -245,7 +245,6 @@ export default function Settings(props) {
           <CssBaseline />
           <Box
             sx={{
-              marginTop: 8,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',

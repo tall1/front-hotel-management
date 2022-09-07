@@ -1,16 +1,10 @@
-import {useEffect, useState} from 'react';
-import {useLocation} from 'react-router';
-import Alert from '@mui/material/Alert';
-import Button from '@mui/material/Button';
-import {Link} from 'react-router-dom';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 export default function Rooms() {
-    const {state} = useLocation();
     const [rooms, setRooms] = useState(null);
 
     useEffect(() => {
-        fetch("/rooms/")
+        fetch("/rooms/get_rooms_by_user_id" + sessionStorage.getItem("userId"))
             .then((res) => {
                 return res.json()
             })

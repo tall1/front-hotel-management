@@ -40,7 +40,7 @@ export default function SignIn() {
       // const hotelData = await fetch('/hotels/' + userData.hotelId).then(response => response.json());
       // sessionStorage.setItem("hotelData", JSON.stringify(hotelData));
 
-      navigate('/login'); // Tocheck {state: data.get('email')}
+      navigate('/info'); // Tocheck {state: data.get('email')}
     }
     /*        console.log({
             username: data.get('email'),
