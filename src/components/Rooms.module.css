@@ -1,0 +1,27 @@
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal .card {
+  max-height: 90vh;
+  min-width: 30%;
+  padding: 1em;
+  overflow-y: auto;
+}
+.modal p {
+  margin: initial;
+}
+.modal .list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 450px;
+  margin: 0 auto;
+}
+.modal .list .list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,52 +1,79 @@
-import {useEffect, useState} from 'react';
-import {useLocation} from 'react-router';
-import Alert from '@mui/material/Alert';
-import Button from '@mui/material/Button';
-import {Link} from 'react-router-dom';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {Link, Outlet} from 'react-router-dom';
+//
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Grid from '@mui/material/Grid';
+import {customColumnStyle, customTableStyle, StyledTableCell, StyledTableRow} from "./StyleTable";
 
 export default function Rooms() {
-    const {state} = useLocation();
     const [rooms, setRooms] = useState(null);
 
     useEffect(() => {
-        fetch("/rooms/")
+        fetch('/rooms/get_rooms_by_user_id/' + sessionStorage.getItem('userId'))
             .then((res) => {
-                return res.json()
+                return res.json();
             })
             .then((rooms) => {
-                setRooms(rooms)
+                setRooms(rooms);
             });
     }, []);
-
-
 
     console.log({rooms});
     if (!rooms) return;
     return (
-        <div>
-            <header>Rooms</header>
-            {<div>
-                <table>
-                    <thead>
-                    <tr>
-                        <th>roomNumber</th>
-                        <th>availableDate</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {rooms.map((room) => {
-                        return (
-                            <tr key={room.roomNumber}>
-                                <td>{room.roomNumber}</td>
-                                <td> {room.floorNumber}</td>
-                            </tr>
-                        );
-                    })}
-                    </tbody>
-                </table>
-            </div>}
-
-        </div>
+        <>
+            <Grid spacing={1} container item xs={12}>
+                <TableContainer component={Paper}>
+                    <Table style={customTableStyle} aria-label="customized table">
+                        <TableHead>
+                            <TableRow>
+                                <StyledTableCell style={customColumnStyle} align="left">
+                                    Room Number
+                                </StyledTableCell>
+                                <StyledTableCell style={customColumnStyle} align="left">
+                                    floor
+                                </StyledTableCell>
+                                <StyledTableCell style={customColumnStyle} align="left">
+                                    capacity
+                                </StyledTableCell>
+                                <StyledTableCell style={customColumnStyle} align="left">
+                                    availableDate
+                                </StyledTableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody style={{width: 100}}>
+                            {rooms.map((room) => (
+                                <StyledTableRow key={room.roomNumber}>
+                                    <StyledTableCell
+                                        component="th"
+                                        scope="row"
+                                        style={{textDecoration: 'none'}}
+                                    >
+                                        <Link className={'table-link'} to={`/rooms/${room.id}`}>
+                                            {room.roomNumber}
+                                        </Link>
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {room.floorNumber}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {room.roomCapacity}
+                                    </StyledTableCell>
+                                    <StyledTableCell align="left">
+                                        {room.availableDate}
+                                    </StyledTableCell>
+                                </StyledTableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Grid>
+            <Outlet/>
+        </>
     );
 }

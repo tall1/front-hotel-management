@@ -11,8 +11,7 @@ import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import {useLocation, useNavigate} from 'react-router-dom';
 
-export default function HotelSignUp() {
-
+const HotelSignUp = () => {
     const [errorMessages, setErrorMessages] = useState("");
     const navigate = useNavigate();
     const {state} = useLocation();
@@ -24,10 +23,7 @@ export default function HotelSignUp() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-
-
          const res = await fetch('/users/get_id_by_email?email=' + state);
-         console.log({res});
         const userId = await res.json();
         sessionStorage.setItem("userId", userId);
 
@@ -49,14 +45,9 @@ export default function HotelSignUp() {
                 document.getElementById('errorlabel').removeAttribute('hidden');
             } else {
                 document.getElementById('errorlabel').setAttribute('hidden', 'hidden');
-                navigate("/Login");
+                navigate("/");
             }
             return response.json();
-        });
-
-        console.log({
-            username: data.get('hotelname'),
-            password: data.get('password'),
         });
     };
 
@@ -106,7 +97,7 @@ export default function HotelSignUp() {
                                 label="Number of rooms"
                                 id="numberofrooms"
                                 autoComplete="number of rooms"
-                                inputProps={{pattern: "[0-9]"}}
+                                inputProps={{pattern: "[0-9]*"}}
 
                             />
                             <TextField
@@ -117,7 +108,7 @@ export default function HotelSignUp() {
                                 label="Number of floors"
                                 id="numberoffloors"
                                 autoComplete="number of floors"
-                                inputProps={{pattern: "[0-9]"}}
+                                inputProps={{pattern: "[0-9]*"}}
                             />
                             <label hidden id="errorlabel">{error}</label>
                             <Button
@@ -136,3 +127,4 @@ export default function HotelSignUp() {
 
     );
 }
+export default HotelSignUp;
