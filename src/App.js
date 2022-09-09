@@ -11,7 +11,7 @@ import SignUp from './components/SignUp';
 import SignIn from './components/SignIn';
 import HotelSignUp from './components/HotelSignUp';
 import Home from './components/Home';
-import React, {useEffect} from 'react';
+import React from 'react';
 import Header from './components/Layout/Header';
 import Room from './components/Room';
 import Reservation from './components/Reservation';
@@ -20,10 +20,6 @@ import Assignment from './components/Assignment';
 import AuthProvider from './store/AuthProvider';
 
 export default function App() {
-  useEffect(() => {
-    setIsLoggedIn(() => false);
-  }, []);
-
   return (
     <BrowserRouter>
       <AuthProvider>

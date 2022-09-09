@@ -44,35 +44,6 @@ const Home = () => {
       number of rooms :{hotelData.numOfRooms}
     </div>
   );
-
-  // (
-  //   const [hotelData, setHotelData] = useState(null);
-  //   const [userData, setUserData] = useState(null);
-
-  //   // change it to sessionStorage for better load
-  //  useEffect(() => {
-  //           fetch('/users/' + sessionStorage.getItem("userId"))
-  //           .then((res) => {
-  //                  return res.json()
-  //          })
-  //          .then((user) => {
-  //              setUserData(user)
-
-  //              fetch('/hotels/' + user.hotelId)
-  //              .then((res) => {
-  //                 return res.json()
-  //             })
-  //             .then((hotel) => {
-  //                 setHotelData(hotel)
-  //             });
-  //          });
-
-  //  }, []);
-
-  //  if (!hotelData || !userData) return
-
-  //      </div>
-  //  );)
 };
 
 export default Home;
