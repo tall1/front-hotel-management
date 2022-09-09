@@ -11,6 +11,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import styles from './Rooms.module.css';
 
 const Room = () => {
+    const featureNames = ["Elevator Adjecent", "Sea View", "Bathtub", "Balcony", "Handicapped Accesible", "High Floor"];
     const [modalIsOpen, setModalIsOpen] = useState(true);
     const [room, setRoom] = useState(null);
     const {roomId} = useParams();
@@ -72,10 +73,10 @@ const Room = () => {
                             </ListItem>
                             <ListItem className={styles['list-item']}>
                                 <label>Features: </label>
-                                <List>
+                                <List className={styles.list}>
                                     {room?.featureIdsList.length
                                         ? room.featureIdsList.map((feature) => (
-                                            <ListItem key={feature}>{feature}</ListItem>
+                                            <ListItem key={feature}>{featureNames[feature-1]}</ListItem>
                                         ))
                                         : null}
                                 </List>

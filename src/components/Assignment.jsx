@@ -20,7 +20,6 @@ const Assignment = () => {
     useEffect(() => {
         fetch(`/assignments/get_assignment/${taskId}`)
             .then((res) => {
-                console.log("Gggggg");
                 return res.json();
             })
             .then((assignment) => {

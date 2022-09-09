@@ -4,6 +4,8 @@ import {useNavigate, useParams} from 'react-router-dom';
 import styles from './Rooms.module.css';
 
 const Reservation = () => {
+    const featureNames = ["Elevator Adjecent", "Sea View", "Bathtub", "Balcony", "Handicapped Accesible", "High Floor"];
+    const importanceNames = ["Not Important", "Nice To Have", "Must"];
     const [modalIsOpen, setModalIsOpen] = useState(true);
     const [reservation, setReservation] = useState(null);
     const {reservationNumber} = useParams();
@@ -68,10 +70,10 @@ const Reservation = () => {
                             </ListItem>
                             <ListItem className={styles['list-item']}>
                                 <label>Feature Importance: </label>
-                                <List>
+                                <List className={styles.list}>
                                     {reservation?.importanceList.length
                                         ? reservation.importanceList.map((importance, index) => (
-                                            <ListItem key={index}>{importance === -1 ? "" : importance}</ListItem>
+                                            <ListItem key={index}>{importance === -1 ? "" : (featureNames[index]+': '+importanceNames[importance-1])} </ListItem>
                                         ))
                                         : null}
                                 </List>

@@ -4,8 +4,10 @@
   align-items: center;
 }
 .modal .card {
+  max-height: 90vh;
   min-width: 30%;
   padding: 1em;
+  overflow-y: auto;
 }
 .modal p {
   margin: initial;
@@ -15,7 +17,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  max-width: 400px;
+  max-width: 450px;
   margin: 0 auto;
 }
 .modal .list .list-item {

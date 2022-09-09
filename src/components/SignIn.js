@@ -1,4 +1,7 @@
-import * as React from 'react';
+import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -6,46 +9,40 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import '../App.css';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
-export default function SignIn() {
+import AuthContext from '../store/auth-context';
+
+// import '../App.css';
+
+const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const authCtx = useContext(AuthContext);
   const navigate = useNavigate();
 
   const error = 'email or password incorrect';
   const theme = createTheme();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const res = await fetch(
-      '/users/verify_email_password?email=' +
-        data.get('email') +
-        '&password=' +
-        data.get('password')
-    );
-    const isExist = await res.json();
-    if (isExist === false) {
-      document.getElementById('errorlabel').removeAttribute('hidden');
-    } else {
-      const userId = await fetch(
-        '/users/get_id_by_email?email=' + data.get('email')
-      ).then((response) => response.json());
-      sessionStorage.setItem('userId', userId);
-      // const userData = await fetch('/users/' + userId).then(response => response.json());
-      //  sessionStorage.setItem("userData", JSON.stringify(userData));
-      // const hotelData = await fetch('/hotels/' + userData.hotelId).then(response => response.json());
-      // sessionStorage.setItem("hotelData", JSON.stringify(hotelData));
-
-      navigate('/info'); // Tocheck {state: data.get('email')}
+    const exists = await authCtx.login(email, password);
+    console.log(`Signin: islogged in ${exists}`);
+    if(!authCtx.isLoggedIn){
+      navigate('/');
     }
-    /*        console.log({
-            username: data.get('email'),
-            password: data.get('password'),
-        });*/
+    else{
+      document.getElementById('errorlabel').removeAttribute('hidden');
+    }
+  };
+
+  const handleEmailChange = (event) => {
+    setEmail(event.currentTarget.value);
+  };
+  const handlePasswordChange = (event) => {
+    setPassword(event.currentTarget.value);
   };
 
   return (
@@ -77,6 +74,8 @@ export default function SignIn() {
                 label="email"
                 name="email"
                 autoComplete="email"
+                value={email}
+                onChange={(event) => handleEmailChange(event)}
                 autoFocus
               />
 
@@ -89,6 +88,8 @@ export default function SignIn() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={(event) => handlePasswordChange(event)}
               />
               <label className="error" hidden id="errorlabel">
                 {error}
@@ -115,4 +116,5 @@ export default function SignIn() {
       </ThemeProvider>
     </form>
   );
-}
+};
+export default SignIn;
