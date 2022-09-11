@@ -3,7 +3,7 @@ import './App.css';
 import LoadFile from './components/LoadFile';
 import Reservations from './components/Reservations';
 import Rooms from './components/Rooms';
-import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Tasks from './components/Tasks';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import Settings from './components/Settings';
@@ -29,7 +29,12 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/settings" element={<Settings />}>
+              <Route
+                path="/settings/assignment/:taskId"
+                element={<Assignment />}
+              />
+            </Route>
             <Route path="/uploadfile" element={<LoadFile />} />
             <Route path="/tasks" element={<Tasks />}>
               <Route path="/tasks/:taskId" element={<Task />} />
