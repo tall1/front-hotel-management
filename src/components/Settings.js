@@ -6,11 +6,12 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { ThemeProvider, useTheme } from '@mui/material/styles';
+import {ThemeProvider, useTheme} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Checkbox from '@mui/material/Checkbox';
+
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
@@ -24,6 +25,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
+
 import { CartesianGrid, Legend, Line, LineChart, XAxis, YAxis } from 'recharts';
 import {
   customColumnStyle,
@@ -154,28 +156,28 @@ export default function Settings() {
     </Grid>
   );
 
-  const handleDateChange = (newValue) => {
-    setDate(newValue);
-  };
+    const handleDateChange = (newValue) => {
+        setDate(newValue);
+    };
 
-  const handleChange = (event) => {
-    switch (event.target.id) {
-      case '1':
-        setChecked1(event.target.checked);
-        break;
-      case '2':
-        setChecked2(event.target.checked);
-        break;
-      case '3':
-        setChecked3(event.target.checked);
-        break;
-      case '4':
-        setChecked4(event.target.checked);
-      // eslint-disable-next-line no-fallthrough
-      default:
-        break;
-    }
-  };
+    const handleChange = (event) => {
+        switch (event.target.id) {
+            case '1':
+                setChecked1(event.target.checked);
+                break;
+            case '2':
+                setChecked2(event.target.checked);
+                break;
+            case '3':
+                setChecked3(event.target.checked);
+                break;
+            case '4':
+                setChecked4(event.target.checked);
+            // eslint-disable-next-line no-fallthrough
+            default:
+                break;
+        }
+    };
 
   const onChangeSelection = (event) => {
     setSelectionStrategy(event.target.value);
@@ -217,12 +219,64 @@ export default function Settings() {
       ok = false;
     }
 
-    return ok;
-  };
-  const renderErrorMessage = (name) =>
-    name === errorMessages.name && (
-      <div className="error">{errorMessages.message}</div>
-    );
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        setDots([
+            {
+                time: 0,
+                fitness: 0.0,
+                generation: 0,
+            },
+        ]);
+        setRunning(true);
+        setChart([]);
+        const data = new FormData(event.currentTarget);
+        if (checkValidity(data)) {
+            console.log('Valid request. userid: ' + sessionStorage.getItem('userId'));
+            await fetch('/task', {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    taskId: '',
+                    userId: sessionStorage.getItem('userId'),
+                    date: date.toISOString().split('T')[0],
+                    elitism: data.get('elitism') ? parseInt(data.get('elitism'), 10) : 0,
+                    populationSize: data.get('population_size')
+                        ? parseInt(data.get('population_size'), 10)
+                        : 0,
+                    mutationProb: parseFloat(data.get('Mutation probability'), 10),
+                    selectionStrategy: selectionStrategy,
+                    selecDouble: data.get('selection')
+                        ? parseFloat(data.get('selection'), 10)
+                        : 0.0,
+                    maxDuration: data.get('max duration')
+                        ? parseInt(data.get('max duration') * 1000, 10)
+                        : 0,
+                    generationCount: data.get('generation count')
+                        ? parseInt(data.get('generation count'), 10)
+                        : 0,
+                    generationLimit: data.get('generation limit')
+                        ? parseInt(data.get('generation limit'), 10)
+                        : 0,
+                    targetFitness: data.get('target fitness')
+                        ? parseFloat(data.get('target fitness'), 10)
+                        : 0.0,
+                    terminationElapsedTime: checked1 ? 1 : 0,
+                    terminationGenerationCount: checked2 ? 1 : 0,
+                    terminationStagnation: checked3 ? 1 : 0,
+                    terminationTargetFitness: checked4 ? 1 : 0,
+                    terminationUserAbort: 0,
+                }),
+            })
+                .then(async function (response) {
+                    if (response.status === 400) {
+                    }
+                    const resJson = await response.json();
+                    sessionStorage.setItem('curTaskID', JSON.stringify(resJson));
+                    const curTaskID = JSON.parse(sessionStorage.getItem('curTaskID'));
 
   const handleSubmit = async (event) => {
     event.preventDefault();

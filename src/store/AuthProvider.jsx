@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from 'react';
 import AuthContext from './auth-context';
 import { useNavigate } from 'react-router-dom';
@@ -10,12 +11,11 @@ const AuthProvider = (props) => {
       navigate('/signin');
     }
   }, []);
-
   const logoutHandler = () => {
     sessionStorage.setItem('userId', '');
     setIsLoggedIn(false);
   };
-
+  
   const loginHandler = async (email, password) => {
     const res = await fetch(
       '/users/verify_email_password?email=' + email + '&password=' + password
@@ -36,7 +36,6 @@ const AuthProvider = (props) => {
     logout: logoutHandler,
     login: loginHandler,
   };
-
   return (
     <AuthContext.Provider value={authContext}>
       {props.children}
