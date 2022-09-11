@@ -1,17 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import AuthContext from '../store/auth-context';
+
+import React, {useEffect, useState} from 'react';
+import styles from './Home.module.css';
 
 const Home = () => {
   const [hotelData, setHotelData] = useState(null);
   const [userData, setUserData] = useState(null);
-  const authCtx = useContext(AuthContext);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!authCtx.isLoggedIn) {
-      navigate('/signin');
-    }
     fetch('/users/' + sessionStorage.getItem('userId'))
       .then((res) => {
         return res.json();
@@ -32,16 +27,14 @@ const Home = () => {
   if (!hotelData || !userData) return;
 
   return (
-    <div>
-      <h1>Hello {userData.firstName + " " + userData.lastName} !</h1>
-      <br></br>
-      Welcome to the evolutionary hotel management system
-      <br></br>
-      your hotel: {hotelData.hotelName}
-      <br></br>
-      number of floors :{hotelData.numOfFloors}
-      <br></br>
-      number of rooms :{hotelData.numOfRooms}
+    <div className={styles.home}>
+      <h1>Hello {userData.firstName + ' ' + userData.lastName} !</h1>
+      <p>
+        Welcome to the evolutionary hotel management system your hotel:{' '}
+        {hotelData.hotelName}
+      </p>
+      <p>number of floors: {hotelData.numOfFloors}</p>
+      <p>number of rooms: {hotelData.numOfRooms}</p>
     </div>
   );
 };

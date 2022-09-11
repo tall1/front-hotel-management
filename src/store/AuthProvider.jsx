@@ -1,11 +1,21 @@
-import { useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import AuthContext from './auth-context';
+import { useNavigate } from 'react-router-dom';
+
 const AuthProvider = (props) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate('/signin');
+    }
+  }, []);
   const logoutHandler = () => {
     sessionStorage.setItem('userId', '');
     setIsLoggedIn(false);
   };
+  
   const loginHandler = async (email, password) => {
     const res = await fetch(
       '/users/verify_email_password?email=' + email + '&password=' + password
