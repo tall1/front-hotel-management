@@ -15,6 +15,8 @@ import {
     StyledTableCell,
     StyledTableRow,
 } from './StyleTable';
+import { Button } from '@mui/material'
+import { Label } from '@mui/icons-material';
 
 const Assignment = () => {
     const [modalIsOpen, setModalIsOpen] = useState(true);
@@ -39,6 +41,12 @@ const Assignment = () => {
         setModalIsOpen(false);
         navigate(location.state.basePath);
     };
+
+    const onSave= () => {
+        document.getElementById('savedlabel').removeAttribute('hidden');
+      
+    };
+
     return (
         <Modal
             className={styles.modal}
@@ -95,6 +103,14 @@ const Assignment = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
+                 <Button variant='contained' onClick={onSave}>Save Assignment</Button>
+                 <Button variant='contained' onClick={closeModalHandler}>Close</Button>
+                 <br></br>
+                 <label className="saved" hidden id="savedlabel">
+                    your assginment saved secsessfully
+                    </label>
+
+
                 </CardContent>
             </Card>
         </Modal>

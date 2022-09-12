@@ -36,6 +36,7 @@ import {
 import {Outlet, useNavigate} from 'react-router-dom';
 
 export default function Settings() {
+
     const navigate = useNavigate();
     const [selectionStrategy, setSelectionStrategy] = useState('1');
     const [errorMessages, setErrorMessages] = useState('');
@@ -227,6 +228,7 @@ export default function Settings() {
         );
 
 
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         setDots([
@@ -328,7 +330,7 @@ export default function Settings() {
         }
     };
 
-    return (
+     return (
         <>
             <form onSubmit={handleSubmit}>
                 <ThemeProvider theme={theme}>
@@ -336,7 +338,7 @@ export default function Settings() {
                         <CssBaseline/>
                         <Stack
                             direction={{xs: 'column', sm: 'column'}}
-                            spacing={{xs: 1, sm: 2, md: 4}}
+                            spacing={{xs: 1, sm: 2, md: 2}}
                         >
                             <Typography align="center" component="h1" variant="h">
                                 Settings
@@ -344,7 +346,6 @@ export default function Settings() {
                             <Typography align="center" component="h1" variant="h6">
                                 please select the setting of the evolutionary engine:
                             </Typography>
-                            <br></br>
                             <Stack
                                 direction={{xs: 'column', sm: 'row'}}
                                 spacing={{xs: 1, sm: 1, md: 4}}
@@ -353,7 +354,7 @@ export default function Settings() {
                                 <Box
                                     sx={{
                                         marginTop: 0,
-                                        marginLeft: 50,
+                                        marginLeft: 30,
                                         display: 'flex',
                                         flexDirection: 'column',
                                         alignItems: 'left',

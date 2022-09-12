@@ -30,8 +30,10 @@ const Home = () => {
     <div className={styles.home}>
       <h1>Hello {userData.firstName + ' ' + userData.lastName} !</h1>
       <p>
-        Welcome to the evolutionary hotel management system your hotel:{' '}
-        {hotelData.hotelName}
+        Welcome to the evolutionary hotel management system 
+      </p>
+      <p>
+      your hotel:{hotelData.hotelName}
       </p>
       <p>number of floors: {hotelData.numOfFloors}</p>
       <p>number of rooms: {hotelData.numOfRooms}</p>

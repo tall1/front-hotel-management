@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import styles from './Header.module.css';
 import { useContext } from 'react';
 import AuthContext from '../../store/auth-context';
+import logo from './newlogo.png';
 
 const Header = () => {
   const authCtx = useContext(AuthContext);
@@ -55,8 +56,8 @@ const Header = () => {
     <AppBar className={styles.header} position="sticky">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link to="/" style={{ display: 'flex', textDecoration: 'none' }}>
-            <AdbIcon sx={{ color: '#fff', mr: 1 }} />
+        <img src={logo}  height={100} width={200} alt="Logo"/>
+          <Link to="/" style={{ display: 'flex', textDecoration: 'none' }} >
             <Typography
               variant="h6"
               noWrap
@@ -78,33 +79,6 @@ const Header = () => {
 
           {authCtx.isLoggedIn ? headerNav : null}
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={false}
-            >
-              {/* {settings.map((setting) => (
-              <MenuItem key={setting}>
-                <Typography textAlign="center">{setting}</Typography>
-              </MenuItem>
-            ))} */}
-            </Menu>
-          </Box>
         </Toolbar>
       </Container>
     </AppBar>
