@@ -1,4 +1,4 @@
-import {Card, CardContent, Modal, Typography} from '@mui/material';
+import {Button, Card, CardContent, Modal, Typography} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import {useLocation, useNavigate, useParams} from 'react-router-dom';
 import styles from './Rooms.module.css';
@@ -9,14 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import './StyleTable';
-import {
-    customColumnStyle,
-    customTableStyle,
-    StyledTableCell,
-    StyledTableRow,
-} from './StyleTable';
-import { Button } from '@mui/material'
-import { Label } from '@mui/icons-material';
+import {customColumnStyle, customTableStyle, StyledTableCell, StyledTableRow,} from './StyleTable';
 
 const Assignment = () => {
     const [modalIsOpen, setModalIsOpen] = useState(true);
@@ -107,7 +100,7 @@ const Assignment = () => {
                  <Button variant='contained' onClick={closeModalHandler}>Close</Button>
                  <br></br>
                  <label className="saved" hidden id="savedlabel">
-                    your assginment saved secsessfully
+                    Your assignment was saved successfully!
                     </label>
 
 
