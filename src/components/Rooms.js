@@ -23,7 +23,6 @@ export default function Rooms() {
             });
     }, []);
 
-    console.log({rooms});
     if (!rooms) return;
     return (
         <>
