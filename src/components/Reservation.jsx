@@ -14,7 +14,6 @@ const Reservation = () => {
     useEffect(() => {
         fetch(`/reservations/${reservationNumber}`)
             .then((res) => {
-                console.log("hi");
                 return res.json();
             })
             .then((reservation) => {
@@ -23,7 +22,6 @@ const Reservation = () => {
     }, []);
 
     if (!reservation) {
-        console.log("Closed");
         return;
     }
 
