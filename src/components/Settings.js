@@ -43,6 +43,7 @@ export default function Settings() {
     const [currentVariant, setCurrentVariant] = useState('filled');
     const [currentDisabled, setCurrentDisabled] = useState(true);
     const [running, setRunning] = useState(false);
+    const [firstRun, setFirstRun] = useState(false);
     const [chart, setChart] = useState([]);
     const [dots, setDots] = useState([
         {
@@ -228,7 +229,6 @@ export default function Settings() {
         );
 
 
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         setDots([
@@ -240,6 +240,7 @@ export default function Settings() {
             },
         ]);
         setRunning(true);
+        setFirstRun(true);
         setChart([]);
         const data = new FormData(event.currentTarget);
         if (!checkValidity(data)) return;
@@ -330,7 +331,7 @@ export default function Settings() {
         }
     };
 
-     return (
+    return (
         <>
             <form onSubmit={handleSubmit}>
                 <ThemeProvider theme={theme}>
@@ -621,7 +622,7 @@ export default function Settings() {
                         </Stack>
                         <br/>
                         <br/>
-                        <div align="center">{progressTable}</div>
+                        <div align="center">{firstRun ? progressTable : null}</div>
                         <br/>
                         <br/>
                         <div align="center">{running ? null : chart}</div>

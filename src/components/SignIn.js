@@ -15,7 +15,6 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import AuthContext from '../store/auth-context';
 
-// import '../App.css';
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
