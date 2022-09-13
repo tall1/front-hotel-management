@@ -8,6 +8,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
+import Box from '@mui/material/Box';
+
 import './StyleTable';
 import {customColumnStyle, customTableStyle, StyledTableCell, StyledTableRow,} from './StyleTable';
 
@@ -96,10 +98,20 @@ const Assignment = () => {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                 <Button variant='contained' onClick={onSave}>Save Assignment</Button>
-                 <Button variant='contained' onClick={closeModalHandler}>Close</Button>
+                    <Box
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          gap: 2,
+                          alignItems: 'center',
+                          minWidth: 300,
+                        }}
+                        >
+                 <Button sx={{mt: 1, mb: 2 }} variant='contained' onClick={onSave}>Save Assignment</Button>
+                 <Button sx={{ mt: 1, mb: 2 }} variant='contained' onClick={closeModalHandler}>Close</Button>
                  <br></br>
-                 <label className="saved" hidden id="savedlabel">
+                    </Box>
+                    <label className="saved" hidden id="savedlabel">
                     Your assignment was saved successfully!
                     </label>
 

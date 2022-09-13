@@ -149,19 +149,19 @@ export default function Tasks() {
 
             {/* </FormControl> */}
             <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: 2,
-                alignItems: 'center',
-                minWidth: 300,
-              }}
+              // sx={{
+              //   display: 'flex',
+              //   flexDirection: 'row',
+              //   gap: 2,
+              //   alignItems: 'center',
+              //   minWidth: 300,
+              // }}
             >
               <Button
                 onClick={handleSubmit}
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 1, mb: 2 }}
               >
                 Find Tasks
               </Button>
@@ -169,7 +169,7 @@ export default function Tasks() {
                 onClick={handleLastTask}
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 0, mb: 2 }}
               >
                 Show Last Task
               </Button>
